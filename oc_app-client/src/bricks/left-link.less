@@ -1,0 +1,22 @@
+@import "./config/config.less";
+
+.@{css}-leftlink {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  .uu5-bricks-link {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    align-items: center;
+
+    padding: 14px 14px 14px 24px;
+
+    @media (min-width: 480px) {
+      padding: 14px 16px;
+    }
+  }
+
+  &:hover .uu5-bricks-link {
+    background-color: #e0e0e0;
+  }
+}

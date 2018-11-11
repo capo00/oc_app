@@ -1,0 +1,20 @@
+{
+  "product": "oc_app",
+  "version": "0.1.0",
+  "license": "License Commercial",
+  "description": {
+    "en": "",
+    "cs": ""
+  },
+  "oc_app-client": {
+    "namespace": "OcApp"
+  },
+  "oc_app-server": {
+    "devkit": {
+      "development": {
+        "appBoxLocationUri": null,
+        "appDeploymentUri": null
+      }
+    }
+  }
+}
