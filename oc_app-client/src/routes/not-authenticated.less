@@ -1,0 +1,41 @@
+@import "./config/config.less";
+@import "~uu5g04/dist/tools.less";
+
+.@{css}-notauthenticated {
+  & > .uu5-bricks-header {
+    text-align: center;
+    padding: 56px 0 48px;
+  }
+}
+
+.@{css}-notauthenticated-login {
+  background-color: rgba(0, 93, 167, 0.11);
+
+  @media @minS {
+    display: flex;
+    align-items: center;
+  }
+
+  .@{css}-welcomerow-text {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    @media @minS {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+.@{css}-notauthenticated-loginbutton {
+  width: 104px;
+  background-color: #005DA7 !important;
+  margin-top: 16px;
+
+  @media @minS {
+    margin-top: 0;
+    margin-left: 16px;
+    margin-right: 24px;
+  }
+}

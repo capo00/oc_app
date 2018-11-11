@@ -1,0 +1,16 @@
+{
+  "uuSubAppDataStore": {
+    "primary": {
+      "type": "uuAppObjectStore",
+      "realization": "MongoDB",
+      "schemaMap": {
+        "transaction": {
+          "realization": "dao/TransactionMongoDB"
+        },
+        "monthsum": {
+          "realization": "dao/MonthSumMongoDB"
+        }
+      }
+    }
+  }
+}
