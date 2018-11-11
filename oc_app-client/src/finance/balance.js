@@ -156,9 +156,6 @@ export default class Balance {
 
         tx.isExpected = value > 0 ? Balance.isExpectedIncome(tx) : Balance.isExpectedCost(tx);
 
-        // let category = Balance.getCategory(tx);
-        // category && (tx.category = category);
-
         transactions.push(tx);
       }
     });
