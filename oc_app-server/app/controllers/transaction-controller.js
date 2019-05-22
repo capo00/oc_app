@@ -9,6 +9,10 @@ class TransactionController {
   search(ucEnv) {
     return TransactionModel.search(ucEnv.getUri().getAwid(), ucEnv.getDtoIn());
   }
+
+  migration1_updateMonth(ucEnv) {
+    return TransactionModel.migration1_updateMonth(ucEnv.getUri().getAwid(), ucEnv.getDtoIn());
+  }
 }
 
 module.exports = new TransactionController();

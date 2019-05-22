@@ -12,7 +12,8 @@ const importDtoInType = shape({
       cc: number(),
       vc: number(),
       sc: number(),
-      isExpected: boolean()
+      isExpected: boolean(),
+      category: string()
     })
   )
 });

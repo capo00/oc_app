@@ -25,6 +25,11 @@
         "realization": "controllers/TransactionController.search",
         "httpMethod": "GET",
         "type": "CMD"
+      },
+      "transaction/migration1_updateMonth": {
+        "realization": "controllers/TransactionController.migration1_updateMonth",
+        "httpMethod": "POST",
+        "type": "CMD"
       }
     }
   }

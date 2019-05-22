@@ -17,7 +17,7 @@ export const Filter = createReactClass({
   statics: {
     tagName: Config.TAG + "Filter",
     classNames: {
-      main: Config.CSS + "filter"
+      main: Config.CSS + "filter center"
     }
   },
   //@@viewOff:statics
@@ -26,6 +26,12 @@ export const Filter = createReactClass({
   //@@viewOff:propTypes
 
   //@@viewOn:getDefaultProps
+  getDefaultProps() {
+    return {
+      date: undefined,
+      monthly: true
+    };
+  },
   //@@viewOff:getDefaultProps
 
   //@@viewOn:standardComponentLifeCycle
@@ -34,31 +40,51 @@ export const Filter = createReactClass({
   //@@viewOn:interface
   //@@viewOff:interface
 
-  //@@viewOn:overridingMeUU5.Bricks.Table.Thods
-  //@@viewOff:overridingMeUU5.Bricks.Table.Thods
+  //@@viewOn:overridingMethods
+  //@@viewOff:overridingMethods
 
   //@@viewOn:componentSpecificHelpers
-  _submit(opt) {
-    this.props.onSubmit(opt.values);
-  },
   //@@viewOff:componentSpecificHelpers
 
   //@@viewOn:render
   render() {
+    let dateFrom = "2014-10-01";
+    let today = new Date();
+    let dateTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
     return (
-      <UU5.Forms.Form {...this.getMainPropsToPass()} onSave={this._submit}>
-        <UU5.Forms.Datepicker required
-                              label="Od"
-                              name="from"
-                              ref_={from => this._from = from}
-                              value={this.props.from} />
-        <UU5.Forms.Datepicker required
-                              label="Do"
-                              name="to"
-                              ref_={to => this._to = to}
-                              value={this.props.to} />
-        <UU5.Forms.Controls />
-      </UU5.Forms.Form>
+      <UU5.Common.Div {...this.getMainPropsToPass()}>
+        <div>
+          <UU5.Bricks.Text
+            colorSchema={this.props.monthly ? undefined : "success"}
+            content="Rok"
+            nestingLevel="inline"
+          />
+          &nbsp;
+          <UU5.Bricks.Switch
+            onChange={opt => this.props.onChange(this.props.date, opt.switchedOn)}
+            switchedOn={this.props.monthly}
+            colorSchema="primary"
+            colorSchemaOff="success"
+            onIcon="mdi-chevron-right"
+            offIcon="mdi-chevron-left"
+          />
+          &nbsp;
+          <UU5.Bricks.Text
+            colorSchema={this.props.monthly ? "primary" : undefined}
+            content="Měsíc"
+            nestingLevel="inline"
+          />
+        </div>
+
+        <UU5.Bricks.Calendar
+          minSelection={this.props.monthly ? "months" : "years"}
+          value={this.props.date}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          onChange={opt => this.props.onChange(opt.value, this.props.monthly)}
+        />
+      </UU5.Common.Div>
     );
   }
   //@@viewOff:render

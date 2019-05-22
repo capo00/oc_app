@@ -23,6 +23,10 @@ class TransactionMongoDB extends UuObjectDao {
     return await super.findOne({ awid, id });
   }
 
+  async update(awid, id, uuObject) {
+    return await super.findOneAndUpdate({ awid, id }, uuObject, "NONE");
+  }
+
   async delete(awid, id) {
     return await super.deleteOne({ id, awid });
   }

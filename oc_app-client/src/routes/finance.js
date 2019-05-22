@@ -1,6 +1,5 @@
 import React from "react";
 import createReactClass from "create-react-class";
-import PropTypes from "prop-types";
 import UU5 from "uu5g04";
 import "uu5g04-bricks";
 
@@ -28,16 +27,19 @@ const Finance = createReactClass({
   //@@viewOff:statics
 
   //@@viewOn:propTypes
-  propTypes: {},
   //@@viewOff:propTypes
 
   //@@viewOn:getDefaultProps
-  getDefaultProps() {
-    return {};
-  },
   //@@viewOff:getDefaultProps
 
   //@@viewOn:standardComponentLifeCycle
+  getInitialState() {
+    return {
+      date: new Date(),
+      monthly: true
+    };
+  },
+
   componentWillMount() {
     document.title = "ocApp | Finance";
   },
@@ -50,30 +52,17 @@ const Finance = createReactClass({
   //@@viewOff:overridingMethods
 
   //@@viewOn:componentSpecificHelpers
-  _getFrom() {
-    let date = new Date();
-    date.setMonth(date.getMonth() ? date.getMonth() - 1 : 0);
-    return date;
-  },
-
-  _getTo() {
-    return new Date();
-  },
-
-  _submitFilter(values) {
-    this._transactions.setFilter(values);
+  _onChange(date, monthly) {
+    this.setState({ date, monthly });
   },
   //@@viewOff:componentSpecificHelpers
 
   //@@viewOn:render
   render() {
-    let from = this._getFrom();
-    let to = this._getTo();
-
     return (
       <UU5.Bricks.Section {...this.getMainPropsToPass()} header="Transakce">
-        <Filter onSubmit={this._submitFilter} from={from} to={to} />
-        <Transactions ref_={tx => this._transactions = tx} from={from} to={to} />
+        <Filter onChange={this._onChange} date={this.state.date} monthly={this.state.monthly} />
+        <Transactions date={this.state.date} monthly={this.state.monthly} />
       </UU5.Bricks.Section>
     );
   }

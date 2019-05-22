@@ -31,9 +31,9 @@ class TransactionModel {
     let uuAppErrorMap = ValidationHelper.processValidationResult(dtoIn, validationResult,
       WARNINGS.importUnsupportedKeys.code, Errors.Import.InvalidDtoInError);
 
-    let dtoOut = {data: []};
+    let dtoOut = { data: [] };
     try {
-      for(let tx of dtoIn.data) {
+      for (let tx of dtoIn.data) {
         tx.awid = awid;
         let txDtoOut = await this.dao.create(tx);
         dtoOut.data.push(txDtoOut);
@@ -72,6 +72,13 @@ class TransactionModel {
 
     dtoOut.uuAppErrorMap = uuAppErrorMap;
     return dtoOut;
+  }
+
+  async migration1_updateMonth(awid, dtoIn) {
+    dtoIn.forEach(async tx => {
+      let {id, ...other} = tx;
+      await this.dao.update(awid, id, { $set: other, $unset: { isExpected: 1, id: 1 } });
+    });
   }
 }
 

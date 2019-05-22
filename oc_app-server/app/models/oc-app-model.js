@@ -32,7 +32,7 @@ class OcAppModel {
     );
 
     // HDS 2
-    const schemas = ["transaction", "monthsum"];
+    const schemas = ["transaction"];
     let schemaCreateResults = schemas.map(async schema => {
       try {
         return await DaoFactory.getDao(schema).createSchema();

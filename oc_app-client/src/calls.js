@@ -1,8 +1,8 @@
 /**
  * Server calls of application client.
  */
-import { Uri } from "uu_appg01_core";
-import { Client } from "uu_appg01";
+import {Uri} from "uu_appg01_core";
+import {Client} from "uu_appg01";
 import * as UU5 from "uu5g04";
 
 let Calls = {
@@ -19,6 +19,11 @@ let Calls = {
   loadTransactions(dtoIn) {
     let commandUri = Calls.getCommandUri("transaction/search");
     Calls.call("get", commandUri, dtoIn);
+  },
+
+  updateMonthTransactions(dtoIn) {
+    let commandUri = Calls.getCommandUri("transaction/migration1_updateMonth");
+    Calls.call("post", commandUri, dtoIn);
   },
 
   importTransactions(dtoIn) {
@@ -50,6 +55,17 @@ let Calls = {
     } else {
       Calls.call("post", commandUri, dtoIn);
     }
+  },
+
+  loadWtm(dtoIn) {
+    dtoIn.data = {
+      "datetimeFrom": dtoIn.data.dateFrom,
+      "datetimeTo": dtoIn.data.dateTo,
+      "organizationalUnitUri": `ues:${dtoIn.data.ouUri}`,
+      "withSubUnits": true
+    };
+    let commandUri = "https://uuos9.plus4u.net/uu-specialistwtmg01-main/99923616732453117-8031926f783d4aaba733af73c1974840/listTimesheetItemsByOu";
+    Calls.call("post", commandUri, dtoIn);
   },
 
   /*

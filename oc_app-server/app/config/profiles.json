@@ -13,7 +13,8 @@
       "init": ["AwidOwner"],
       "defaultUve": ["Public"],
       "transaction/import": ["Executives", "Authorities"],
-      "transaction/search": ["Readers", "Executives", "Authorities"]
+      "transaction/search": ["Readers", "Executives", "Authorities"],
+      "transaction/migration1_updateMonth": ["Readers", "Executives", "Authorities"]
     }
   }
 }

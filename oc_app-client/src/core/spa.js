@@ -12,6 +12,7 @@ import Home from "../routes/home.js";
 import About from "../routes/about.js";
 import Finance from "../routes/finance.js";
 import FinanceImport from "../routes/finance-import.js";
+import Wtm from "../routes/wtm.js";
 
 import "./spa.less";
 
@@ -68,6 +69,9 @@ const Spa = createReactClass({
               component: <FinanceImport />, content: "Import"
             }
           }
+        },
+        wtm: {
+          component: <Wtm />, content: "WTM"
         }
       }, menuRoutes);
 

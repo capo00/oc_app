@@ -1,0 +1,17 @@
+@import "~uu5g04/dist/tools.less";
+
+@ns: uu5-chart-barchart;
+
+.@{ns}-simple-chart-stacked-bar-chart {
+  margin-bottom: 19px;
+  .recharts-legend-wrapper {
+    margin-bottom: -19px;
+  }
+  @media @maxS{
+    margin-bottom: 45px;
+    .recharts-legend-wrapper {
+      margin-bottom: -45px;
+    }
+  }
+}
+

@@ -8,8 +8,8 @@ import "uu5codekitg01";
 
 import Config from "./config/config.js";
 import Calls from "../calls.js";
-import CSV from "./csv.js";
-import Balance from "./balance.js";
+import CSV from "./model/csv.js";
+import Balance from "./model/balance.js";
 
 import "./transactions-import.less";
 
@@ -74,7 +74,7 @@ const TransactionsImport = createReactClass({
       reader.onload = (e) => {
         let rows = CSV.convert(e.target.result);
         let txs = Balance.getTransactions(rows);
-        this.setState({ transactions: txs });
+        this.setState({ transactions: txs.map(tx => tx.toObject()) });
       };
 
       // Read text
