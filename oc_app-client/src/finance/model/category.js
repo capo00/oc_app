@@ -124,7 +124,8 @@ export default class Category {
     "flat-kh-net": {
       name: "Internet v domě v KH",
       isValid(tx) {
-        return /^2700027000\/2700$/.test(tx.account) && tx.vc === "128282373"
+        return (/^2700027000\/2700$/.test(tx.account) && tx.vc === "128282373") ||
+          (/^107290482\/0?800$/.test(tx.account) && tx.vc === "128332550")
       }
     },
     "flat-kh-rent": {
@@ -155,6 +156,12 @@ export default class Category {
       name: "Tarif mamka",
       isValid(tx) {
         return /^19-6302630267\/0?100$/.test(tx.account) && tx.value === 150
+      }
+    },
+    "mobile-tariff-dad": {
+      name: "Tarif taťka",
+      isValid(tx) {
+        return /^284032222\/0?300$/.test(tx.account) && tx.value === 149
       }
     },
     "mobile-tariff-petra": {
