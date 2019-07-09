@@ -94,7 +94,7 @@ export default class Category {
     "flat-prague-rent": {
       name: "Pronájem bytu v Praze",
       isValid(tx) {
-        return /VS:31310/.test(tx.details) && tx.value === 18000
+        return tx.value === 18000 && (/VS:31310/.test(tx.details) || tx.vc === "31310")
       }
     },
     "flat-kh-hypothec": {
@@ -186,6 +186,12 @@ export default class Category {
       name: "Tarif Jana",
       isValid(tx) {
         return /^933401113\/0?800$/.test(tx.account) && (tx.value === 129 || tx.value === 149)
+      }
+    },
+    "car-fabia-credit": {
+      name: "Úvěr Fabia",
+      isValid(tx) {
+        return /^3683572\/0?800$/.test(tx.account) && (tx.vc === "1910005754")
       }
     }
   };
