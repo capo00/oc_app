@@ -87,7 +87,7 @@
         "localBaseUri": "node_modules/uu5codekitg01/dist/"
       },
       "uu5chartg01": {
-        "cdnBaseUri": "https://cdn.plus4u.net/beta/uu-uu5chartg01/${dependencies['uu5chartg01'].version}/",
+        "cdnBaseUri": "https://cdn.plus4u.net/uu-uu5chartg01/${dependencies['uu5chartg01'].version}/",
         "localBaseUri": "node_modules/uu5chartg01/dist/"
       }
     }

@@ -31,6 +31,18 @@ export default class Category {
         return /^700135002\/0800$/.test(tx.account) && tx.vc === "7313432852"
       }
     },
+    "insurance-generali": {
+      name: "Životní pojištění Generali",
+      isValid(tx) {
+        return /^100001\/2700$/.test(tx.account) && tx.vc === "9200424111"
+      }
+    },
+    "investment-cpp-taxes": {
+      name: "Životní pojištění, investice + daně",
+      isValid(tx) {
+        return /^700135002\/0800$/.test(tx.account) && tx.vc === "7319783282"
+      }
+    },
     "investment-investika-5": {
       name: "Investice Investika - 5let",
       isValid(tx) {
