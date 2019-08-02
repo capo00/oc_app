@@ -185,11 +185,11 @@ export const YearSummary = createReactClass({
       }
     ];
 
-    labels.forEach(month => {
+    labels.forEach((month, i) => {
       let monthTransactions = this.state.yearTransactions.transactions[`${this.props.year}/${month}`];
       if (monthTransactions) {
-        data[0].values.push(monthTransactions.incomes);
-        data[1].values.push(monthTransactions.costs * -1);
+        data[0].values[i] = monthTransactions.incomes;
+        data[1].values[i] = monthTransactions.costs * -1;
         txs[data[0].values.length - 1] = monthTransactions;
       }
     });
@@ -211,7 +211,7 @@ export const YearSummary = createReactClass({
       data.push({
         label: "Nečekané",
         value: unexpectedValue * -1,
-        colorSchema: "grey"
+        colorSchema: "grey-rich"
       });
     }
 

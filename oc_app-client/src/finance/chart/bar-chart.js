@@ -4,9 +4,35 @@ import PropTypes from "prop-types";
 import UU5 from "uu5g04";
 import "uu5g04-bricks";
 import "uu5chartg01";
-import colors from "./colors.js";
 
 import "./bar-chart.less";
+
+const defaultColor = "blue";
+const defaultColorSchema = defaultColor + "-rich";
+
+function getColorSchema(colorSchema) {
+  if (colorSchema === "default") colorSchema = defaultColorSchema;
+
+  let rightColorSchema = UU5.Environment.colorSchemaMap[colorSchema] || UU5.Environment.colorSchemaMap[defaultColorSchema];
+  if (rightColorSchema) colorSchema = rightColorSchema.color;
+
+  const isRich = /-rich$/.test(colorSchema);
+  let start = "c100";
+  let stop = "c50";
+  let color = "c500";
+
+  if (isRich) {
+    colorSchema = colorSchema.match(/^(.*)-rich$/)[1];
+    start = "c500";
+    stop = "c100";
+    color = "c700";
+  }
+
+  let colors = UU5.Environment.colors[colorSchema];
+  if (!colors) colors = UU5.Environment.colors[defaultColor];
+
+  return { start: colors[start], stop: colors[stop], color: colors[color] };
+}
 
 const BarChart = createReactClass({
   //@@viewOn:mixins
@@ -97,8 +123,7 @@ const BarChart = createReactClass({
   //@@viewOn:componentSpecificHelpers
   _getBars(parsedData, stacked) {
     let items = parsedData.map((obj, i) => {
-      let currentColorSchema =
-        colors[UU5.Environment.getColorSchema(obj.colorSchema)] || colors["default"];
+      let currentColorSchema = getColorSchema(obj.colorSchema);
       return (
         <UU5.Chart.Bar
           isAnimationActive={this.props.isAnimationActive}

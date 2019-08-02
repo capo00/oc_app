@@ -180,7 +180,7 @@ export const MonthSummary = createReactClass({
       data.push({
         label,
         value: unexpectedValue,
-        colorSchema: "grey",
+        colorSchema: "grey-rich",
         onClick: () => this._openModal(label, unexpectedValue, this.state.monthTransactions.incomesUnexpectedTransactions)
       });
     }
@@ -203,7 +203,7 @@ export const MonthSummary = createReactClass({
       data.push({
         label,
         value: unexpectedValue * -1,
-        colorSchema: "grey",
+        colorSchema: "grey-rich",
         onClick: () => this._openModal(label, unexpectedValue, this.state.monthTransactions.costsUnexpectedTransactions)
       });
     }
