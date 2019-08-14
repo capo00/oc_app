@@ -15,18 +15,21 @@ export default class Category {
     },
     "insurance-life-aegon": {
       name: "Životní pojištění Aegon",
+      state: "closed",
       isValid(tx) {
         return /^2043980407\/2600$/.test(tx.account) && tx.vc === "3300725783"
       }
     },
     "insurance-accident-allegro": {
       name: "Úrazové pojištění Allegro",
+      state: "closed",
       isValid(tx) {
         return /^100001\/2700$/.test(tx.account) && tx.vc === "9644079507"
       }
     },
     "insurance-okdouble-family": {
       name: "Životní pojištění OK Double",
+      state: "closed",
       isValid(tx) {
         return /^700135002\/0800$/.test(tx.account) && tx.vc === "7313432852"
       }
@@ -45,24 +48,34 @@ export default class Category {
     },
     "investment-investika-5": {
       name: "Investice Investika - 5let",
+      state: "closed",
       isValid(tx) {
         return /^500002432\/0800$/.test(tx.account) && tx.vc === "1015004414"
       }
     },
     "investment-conseq-10": {
       name: "Investice Conseq - 10let",
+      state: "closed",
       isValid(tx) {
         return /^666777-9701349863\/2700$/.test(tx.account) && tx.vc === "9701349863"
       }
     },
+    "investment-conseq-31": {
+      name: "Investice Conseq - 31let",
+      isValid(tx) {
+        return /^666777-9605117392\/2700$/.test(tx.account)
+      }
+    },
     "insurance-okdouble-lenka": {
       name: "Životní pojištění Lenka",
+      state: "closed",
       isValid(tx) {
         return /^2108889277\/2700$/.test(tx.account) && tx.vc === "6700052140"
       }
     },
     "insurance-okdouble-ondra": {
       name: "Životní pojištění Ondra",
+      state: "closed",
       isValid(tx) {
         return /^2108889277\/2700$/.test(tx.account) && tx.vc === "6700052129"
       }
