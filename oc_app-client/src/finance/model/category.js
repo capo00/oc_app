@@ -66,6 +66,12 @@ export default class Category {
         return /^666777-9605117392\/2700$/.test(tx.account)
       }
     },
+    "investment-conseq-31-lenka": {
+      name: "Investice Conseq - 31let - Léňa",
+      isValid(tx) {
+        return /^2714804093\/0800$/.test(tx.account) && tx.value === 2500
+      }
+    },
     "insurance-okdouble-lenka": {
       name: "Životní pojištění Lenka",
       state: "closed",
