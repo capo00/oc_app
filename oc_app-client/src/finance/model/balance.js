@@ -72,9 +72,19 @@ const CONSTANT_CODE_I = 19;
 const VARIABLE_CODE_I = 20;
 const SPECIFIC_CODE_I = 21;
 
+function pad(num) {
+  return num.length === 1 ? "0" + num : num;
+}
+
+function parseDate(date) {
+  const parts = date.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  return [parts[3], pad(parts[2]), pad(parts[1])].join("-");
+}
+
 export default class Balance {
 
   static getTransactions(data) {
+    data.shift(); // top
     data.shift(); // header
     data.shift(); // account
     data.shift(); // header of balance
@@ -87,7 +97,7 @@ export default class Balance {
           code: row[ACC_I].trim(),
           value: value,
           currency: row[CURR_I].trim(),
-          date: new Date(row[DATE_I] || row[DATE_TEMP_I]),
+          date: new Date(parseDate(row[DATE_I] || row[DATE_TEMP_I])),
           account: /^\d+(?:-\d*)?/.test(row[BANK_ACC_I].trim()) ? [row[BANK_ACC_I].trim(), row[BANK_NUM_I].trim()].join("/") : null,
           accountName: row[BANK_ACC_NAME_I].trim() || null,
           details: Balance.range(row, DETAILS_I_START, DETAILS_I_END).join("\n"),
