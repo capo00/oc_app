@@ -1,3 +1,4 @@
+//@@viewOn:imports
 import React from "react";
 import createReactClass from "create-react-class";
 import * as UU5 from "uu5g04";
@@ -5,8 +6,8 @@ import "uu5g04-bricks";
 
 import Calls from "../calls.js";
 import Loader from "../bricks/loader.js";
-import MonthSummary from "./month-summary.js";
-import YearSummary from "./year-summary.js";
+import Summary from "./summary.js";
+//@@viewOff:imports
 
 export const Transactions = createReactClass({
 
@@ -57,15 +58,21 @@ export const Transactions = createReactClass({
           } else if (isError) {
             result = <UU5.Common.Error content="Data ze serveru nelze načíst" errorData={data} />;
           } else {
-            result = this.props.monthly
-              ? <MonthSummary data={data.itemList} month={UU5.Common.Tools.formatDate(this.props.date, "Y/mm")} />
-              : <YearSummary data={data.itemList} year={this.props.date.getFullYear()} />;
+            const accounts = [...new Set(data.itemList.map(tx => tx.code))];
+            result = (
+              <Summary
+                accounts={accounts}
+                data={data.itemList}
+                monthly={this.props.monthly}
+                date={this.props.date}
+              />
+            );
           }
 
           return result;
         }}
       </Loader>
-    )
+    );
   }
   //@@viewOff:render
 });

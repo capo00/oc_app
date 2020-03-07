@@ -165,7 +165,7 @@ export const MonthSummary = createReactClass({
       }
     });
 
-    return [...data, ...categories];
+    return [...data, ...categories.filter(cat => cat.value)];
   },
 
   _getIncomesData() {
@@ -239,13 +239,13 @@ export const MonthSummary = createReactClass({
           header={this._getHeader()}
           rows={this._getRows(this.state.monthTransactions.transactions)}
         />
-      )
+      );
     } else {
       return (
         <UU5.Bricks.Div className="center">
           <UU5.Bricks.Link content="Všechny transakce" onClick={() => this.setState({ allTx: true })} />
         </UU5.Bricks.Div>
-      )
+      );
     }
   },
   //@@viewOff:componentSpecificHelpers
