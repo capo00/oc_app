@@ -50,7 +50,7 @@ export const Filter = createReactClass({
   render() {
     let dateFrom = "2014-10-01";
     let today = new Date();
-    let dateTo = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    let dateTo = new Date(today.getFullYear(), today.getMonth(), 0);
 
     return (
       <UU5.Common.Div {...this.getMainPropsToPass()}>

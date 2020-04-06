@@ -34,8 +34,11 @@ const Finance = createReactClass({
 
   //@@viewOn:standardComponentLifeCycle
   getInitialState() {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+
     return {
-      date: new Date(),
+      date,
       monthly: true
     };
   },
