@@ -156,12 +156,18 @@ export const MonthSummary = createReactClass({
         categories[index].transactions.push(tx);
         categories[index].onClick = () => this._openModal(categories[index].label, categories[index].value, categories[index].transactions);
       } else {
-        data.push({
-          label: tx.getCategoryTitle(),
-          value,
-          colorSchema: colors[i % colors.length],
-          onClick: () => this._openModal(tx.getCategoryTitle(), value, [tx])
-        });
+        const label = tx.getCategoryTitle();
+        const foundTxIndex = data.findIndex(t => t.label === label);
+        if (foundTxIndex > -1) {
+          data[foundTxIndex].value += value;
+        } else {
+          data.push({
+            label,
+            value,
+            colorSchema: colors[i % colors.length],
+            onClick: () => this._openModal(label, value, [tx])
+          });
+        }
       }
     });
 
@@ -314,7 +320,7 @@ export const MonthSummary = createReactClass({
         <UU5.Bricks.Div {...this.getMainPropsToPass()}>
           Za dané období nebyly žádné transakce nalezeny.
         </UU5.Bricks.Div>
-      )
+      );
     }
   }
   //@@viewOff:render

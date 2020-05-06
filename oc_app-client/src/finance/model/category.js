@@ -199,7 +199,7 @@ export default class Category {
     "mobile-tariff-petra": {
       name: "Tarif Petra",
       isValid(tx) {
-        return /^107-2704330277\/0?100$/.test(tx.account) && (tx.value === 299 || tx.value === 550)
+        return /^107-2704330277\/0?100$/.test(tx.account) && (tx.value === 299 || tx.value === 399 || tx.value === 550)
       }
     },
     "mobile-tariff-ales": {
