@@ -69,7 +69,7 @@ export default class Category {
     "investment-conseq-31-lenka": {
       name: "Investice Conseq - 31let - Léňa",
       isValid(tx) {
-        return /^2714804093\/0800$/.test(tx.account) && tx.value === 2500
+        return /^1387441664\/2700$/.test(tx.account) && tx.value === 5000
       }
     },
     "insurance-okdouble-lenka": {
@@ -89,7 +89,7 @@ export default class Category {
     "flat-caslav-hypothec": {
       name: "Hypotéka bytu v Čáslavi",
       isValid(tx) {
-        return !tx.account && /^PL:.*00002168-998$/.test(tx.details.replace("\n", ""))
+        return /^27-8378231747\/0100$/.test(tx.account) && tx.cc == 498;
       }
     },
     "flat-prague-hypothec": {
@@ -125,7 +125,7 @@ export default class Category {
     "flat-prague-rent": {
       name: "Pronájem bytu v Praze",
       isValid(tx) {
-        return tx.value === 18000 && (/VS: *31310/.test(tx.details) || tx.vc === "31310")
+        return (tx.value === 18000 || tx.value === 19000) && (/VS: *31310/.test(tx.details) || /^0*31310$/.test(tx.vc))
       }
     },
     "flat-kh-hypothec": {
@@ -181,7 +181,7 @@ export default class Category {
     "salary-uso": {
       name: "Plat v USO",
       isValid(tx) {
-        return /^51-441400237\/0?100$/.test(tx.account)
+        return /^51-441400237\/0?100$/.test(tx.account) || /^35-6742920217\/0100$/.test(tx.account)
       }
     },
     "mobile-tariff-mom": {
@@ -199,7 +199,7 @@ export default class Category {
     "mobile-tariff-petra": {
       name: "Tarif Petra",
       isValid(tx) {
-        return /^107-2704330277\/0?100$/.test(tx.account) && (tx.value === 299 || tx.value === 399 || tx.value === 550)
+        return /^107-2704330277\/0?100$/.test(tx.account) && (tx.value === 299 || tx.value === 399 || tx.value === 550 || tx.value === 339)
       }
     },
     "mobile-tariff-ales": {
