@@ -130,40 +130,69 @@ export default class Category {
     },
     "flat-kh-hypothec": {
       name: "Hypotéka bytu v Kutné Hoře",
+      state: "closed",
       isValid(tx) {
         return !tx.account && /^PL:.*07942384-007$/.test(tx.details.replace("\n", ""))
       }
     },
     "flat-kh-el": {
       name: "Elektrika v domě v KH",
+      state: "closed",
       isValid(tx) {
         return /^7770227\/0?100$/.test(tx.account) && /^0*7385551500$/.test(tx.vc)
       }
     },
     "flat-kh-gas": {
       name: "Plyn v domě v KH",
+      state: "closed",
       isValid(tx) {
         return /^7770227\/0?100$/.test(tx.account) && /^0*7385370500$/.test(tx.vc)
       }
     },
     "flat-kh-water": {
       name: "Vodné v domě v KH",
+      state: "closed",
       isValid(tx) {
         return /^17701161\/0?100$/.test(tx.account) && /^0*216160620$/.test(tx.vc)
       }
     },
     "flat-kh-net": {
       name: "Internet v domě v KH",
+      state: "closed",
       isValid(tx) {
         return (/^2700027000\/2700$/.test(tx.account) && tx.vc === "128282373") ||
           (/^107290482\/0?800$/.test(tx.account) && /^0*128332550$/.test(tx.vc))
+      }
+    },
+    "house-karlov-hypothec": {
+      name: "Hypotéka domu v KH",
+      isValid(tx) {
+        return !tx.account && /^PL:.*07942384-012$/.test(tx.details.replace("\n", ""));
+      }
+    },
+    "house-karlov-el": {
+      name: "Elektrika v domě v KH",
+      isValid(tx) {
+        return /^7770227\/0100$/.test(tx.account) && /^0*7453854100$/.test(tx.vc);
+      }
+    },
+    "house-karlov-water": {
+      name: "Vodné v domě v KH",
+      isValid(tx) {
+        return /^17701161\/0?100$/.test(tx.account) && /^0*20661170$/.test(tx.vc);
+      }
+    },
+    "house-karlov-net": {
+      name: "Internet v domě v KH",
+      isValid(tx) {
+        return /^3947727329\/0800$/.test(tx.account) && /^0*48208$/.test(tx.vc);
       }
     },
     "flat-kh-rent": {
       name: "Pronájem bytu v KH (Benešova)",
       state: "closed",
       isValid(tx) {
-        return /^115-402470267\/0?100$/.test(tx.account) && tx.vc === "39103"
+        return /^115-402470267\/0?100$/.test(tx.account) && tx.vc === "39103";
       }
     },
     "salary-vigour": {
