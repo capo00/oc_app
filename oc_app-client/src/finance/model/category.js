@@ -204,7 +204,7 @@ export default class Category {
     "salary-ucl": {
       name: "Plat v UCL",
       isValid(tx) {
-        return /^35-2147930287\/0?100$/.test(tx.account)
+        return /^35-2147930287\/0?100$/.test(tx.account) && tx.value > 0;
       }
     },
     "salary-uso": {
