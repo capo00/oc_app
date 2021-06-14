@@ -255,6 +255,12 @@ export default class Category {
         return /^2867661193\/0?800$/.test(tx.account) && tx.value === 150
       }
     },
+    "mobile-tariff-renca": {
+      name: "Tarif Renča",
+      isValid(tx) {
+        return /^2500836292\/2010$/.test(tx.account) && tx.value === 149
+      }
+    },
     "car-fabia-credit": {
       name: "Úvěr Fabia",
       isValid(tx) {
