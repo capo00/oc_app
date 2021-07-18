@@ -125,7 +125,7 @@ export default class Category {
     "flat-prague-rent": {
       name: "Pronájem bytu v Praze",
       isValid(tx) {
-        return (tx.value === 18000 || tx.value === 19000) && (/VS: *31310/.test(tx.details) || /^0*31310$/.test(tx.vc))
+        return /31310$/.test(tx.vc)
       }
     },
     "flat-kh-hypothec": {
@@ -228,7 +228,7 @@ export default class Category {
     "mobile-tariff-petra": {
       name: "Tarif Petra",
       isValid(tx) {
-        return /^107-2704330277\/0?100$/.test(tx.account) && (tx.value === 299 || tx.value === 399 || tx.value === 550 || tx.value === 339)
+        return (/^107-2704330277\/0?100$/.test(tx.account) || /^1410591004\/2700$/.test(tx.account)) && (tx.value === 299 || tx.value === 399 || tx.value === 550 || tx.value === 339)
       }
     },
     "mobile-tariff-ales": {
