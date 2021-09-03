@@ -125,7 +125,7 @@ export default class Category {
     "flat-prague-rent": {
       name: "Pronájem bytu v Praze",
       isValid(tx) {
-        return /31310$/.test(tx.vc)
+        return /31310$/.test(tx.vc) || tx.account === "4484193053/0800";
       }
     },
     "flat-kh-hypothec": {

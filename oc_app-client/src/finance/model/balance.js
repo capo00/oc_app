@@ -101,14 +101,26 @@ export default class Balance {
     data.shift(); // account
     data.shift(); // header of balance
 
+    let valueI = VALUE_I;
+    let currI = CURR_I;
+    if (data[0][1] === "CZK") {
+      valueI = CURR_I;
+      currI = VALUE_I;
+    }
+
     let transactions = [];
     data.forEach(row => {
       if (row.length > SPECIFIC_CODE_I + 1) {
-        let value = +(row[VALUE_I].replace(/"/g, "").replace(",", "."));
+        let value = +(row[valueI].replace(/"/g, "").replace(",", "."));
+        let code = row[ACC_I].trim();
+        if (data[0][1] === "CZK") {
+          code = code.split(/0000+/)[1];
+        }
+
         let tx = new Transaction({
-          code: row[ACC_I].trim(),
+          code,
           value: value,
-          currency: row[CURR_I].trim(),
+          currency: row[currI].trim(),
           date: parseDate(row[DATE_I] || row[DATE_TEMP_I]),
           account: /^\d+(?:-\d*)?/.test(row[BANK_ACC_I].trim()) ? [row[BANK_ACC_I].trim(), row[BANK_NUM_I].trim()].join("/") : null,
           accountName: row[BANK_ACC_NAME_I].trim() || null,
