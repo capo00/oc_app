@@ -95,7 +95,7 @@ export default class Category {
     "flat-prague-hypothec": {
       name: "Hypotéka bytu v Praze",
       isValid(tx) {
-        return !tx.account && (/^PL:.*00002192-350$/.test(tx.details.replace("\n", "")) || /^SPRÁVA ÚVĚRU/.test(tx.details))
+        return !tx.account && (/00002192-350/.test(tx.details.replace("\n", "")))
       }
     },
     "flat-prague-fees": {
@@ -167,7 +167,7 @@ export default class Category {
     "house-karlov-hypothec": {
       name: "Hypotéka domu v KH",
       isValid(tx) {
-        return !tx.account && /^PL:.*07942384-012$/.test(tx.details.replace("\n", ""));
+        return !tx.account && /07942384-012/.test(tx.details.replace("\n", ""));
       }
     },
     "house-karlov-el": {
