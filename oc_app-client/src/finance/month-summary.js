@@ -7,6 +7,7 @@ import "uu5chartg01";
 import Config from "./config/config.js";
 import MonthTransactions from "./model/month-transactions.js";
 import DataTable from "./data-table.js";
+import PieChart from "./chart/pie-chart.js";
 
 import "./month-summary.less";
 
@@ -178,7 +179,10 @@ export const MonthSummary = createReactClass({
     let data = this._getTxData(this.state.monthTransactions.incomesExpectedTransactions, [{
       label: "Tarify",
       regex: /^mobile-tarif/
-    }]);
+    }]).sort((a, b) => {
+      if (a.value < b.value) return 1;
+      return -1;
+    });
 
     let unexpectedValue = Math.round((this.state.monthTransactions.incomes - this.state.monthTransactions.incomesExpected) * 100) / 100;
     if (unexpectedValue) {
@@ -186,7 +190,7 @@ export const MonthSummary = createReactClass({
       data.push({
         label,
         value: unexpectedValue,
-        colorSchema: "grey-rich",
+        color: "grey",
         onClick: () => this._openModal(label, unexpectedValue, this.state.monthTransactions.incomesUnexpectedTransactions)
       });
     }
@@ -201,7 +205,10 @@ export const MonthSummary = createReactClass({
       { label: "Dům KH", regex: /^flat-kh/ },
       { label: "Byt Praha", regex: /^flat-prague/ },
       { label: "Byt Čáslav", regex: /^flat-caslav/ }
-    ]);
+    ]).sort((a, b) => {
+      if (a.value < b.value) return 1;
+      return -1;
+    });
 
     let unexpectedValue = Math.round((this.state.monthTransactions.costs - this.state.monthTransactions.costsExpected) * 100) / 100;
     if (unexpectedValue) {
@@ -209,7 +216,7 @@ export const MonthSummary = createReactClass({
       data.push({
         label,
         value: unexpectedValue * -1,
-        colorSchema: "grey-rich",
+        color: "grey",
         onClick: () => this._openModal(label, unexpectedValue, this.state.monthTransactions.costsUnexpectedTransactions)
       });
     }
@@ -286,7 +293,7 @@ export const MonthSummary = createReactClass({
             >
               {this._getRow("Očekávané příjmy", monthTransactions.incomesExpected, monthTransactions.incomesExpectedTransactions, "success")}
               {this._getRow("Neočekávané příjmy", monthTransactions.incomes - monthTransactions.incomesExpected, monthTransactions.incomesUnexpectedTransactions, "success")}
-              <UU5.SimpleChart.PieChart data={this._getIncomesData()} displayLegend={false} />
+              <PieChart data={this._getIncomesData()} />
             </UU5.Bricks.Column>
             <UU5.Bricks.Column
               colWidth="m-6"
@@ -304,7 +311,7 @@ export const MonthSummary = createReactClass({
             >
               {this._getRow("Očekávané výdaje", monthTransactions.costsExpected, monthTransactions.costsExpectedTransactions, "danger")}
               {this._getRow("Neočekávané výdaje", monthTransactions.costs - monthTransactions.costsExpected, monthTransactions.costsUnexpectedTransactions, "danger")}
-              <UU5.SimpleChart.PieChart data={this._getCostsData()} displayLegend={false} />
+              <PieChart data={this._getCostsData()} />
             </UU5.Bricks.Column>
           </UU5.Bricks.Row>
 
