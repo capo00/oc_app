@@ -216,8 +216,8 @@ export default class Category {
     "mobile-tariff-mom": {
       name: "Tarif mamka",
       isValid(tx) {
-        return /^19-6302630267\/0?100$/.test(tx.account) && tx.value === 150
-      }
+        return (/^19-6302630267\/0?100$/.test(tx.account) || /^4568200003\/0800$/.test(tx.account)) && tx.value === 150;
+      },
     },
     "mobile-tariff-dad": {
       name: "Tarif taťka",
