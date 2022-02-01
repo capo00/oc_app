@@ -30,7 +30,8 @@ const Summary = createComponent({
     //@@viewOff:interface
 
     //@@viewOn:private
-    const displayedData = account ? data.filter(acc => acc.code === account) : data;
+    // only transactions not between my accounts
+    const displayedData = data.filter(acc => account ? acc.code === account : !accounts.find(ac => acc.account?.startsWith(ac)));
     //@@viewOff:private
 
     //@@viewOn:render

@@ -58,31 +58,51 @@ class Account {
   }
 }
 
-const ACC_I = 0;
-const VALUE_I = 1;
-const VALUE_I_KB = 4;
-const VALUE_I_ORG_KB = 5;
-const CURR_I = 2;
-const CURR_I_KB = 6;
-const DATE_I = 3;
-const DATE_I_KB = 0;
-const DATE_TEMP_I = 4;
-const DATE_TEMP_I_KB = 1;
-const BANK_NUM_I = 5;
-const BANK_ACC_I = 8;
-const BANK_ACC_I_KB = 2;
-const BANK_ACC_NAME_I = 9;
-const BANK_ACC_NAME_I_KB = 3;
-const DETAILS_I_START = 13;
-const DETAILS_I_START_KB = 12;
-const DETAILS_I_END = 18;
-const DETAILS_I_END_KB = 17;
-const CONSTANT_CODE_I = 19;
-const CONSTANT_CODE_I_KB = 9;
-const VARIABLE_CODE_I = 20;
-const VARIABLE_CODE_I_KB = 8;
-const SPECIFIC_CODE_I = 21;
-const SPECIFIC_CODE_I_KB = 10;
+const CSV_INDEXES = {
+  ucb: {
+    code: 0,
+    value: 1,
+    currency: 2,
+    date: 3,
+    dateTemp: 4,
+    accountCode: 5,
+    accountNumber: 8,
+    accountName: 9,
+    detailStart: 13,
+    detailEnd: 18,
+    cc: 19,
+    vc: 20,
+    sc: 21,
+  },
+  kb: {
+    value: 4,
+    currency: 6,
+    date: 0,
+    dateTemp: 1,
+    account: 2,
+    accountName: 3,
+    detailStart: 12,
+    detailEnd: 17,
+    cc: 9,
+    vc: 8,
+    sc: 10,
+  },
+  moneta: {
+    code: 0,
+    value: 7,
+    currency: 8,
+    date: 5,
+    dateTemp: 6,
+    accountCode: 3,
+    accountNumber: 2,
+    accountName: 4,
+    detailStart: 12,
+    detailEnd: 18,
+    cc: 11,
+    vc: 9,
+    sc: 10,
+  },
+}
 
 function pad(num) {
   return num.length === 1 ? "0" + num : num;
@@ -95,24 +115,26 @@ function parseDate(date) {
 
 export default class Balance {
 
-  static _getUCTx(data) {
+  static _getUCBx(data) {
     data.shift(); // top
     data.shift(); // header
     data.shift(); // account
     data.shift(); // header of balance
 
-    let valueI = VALUE_I;
-    let currI = CURR_I;
+    const i = CSV_INDEXES.ucb;
+
+    let valueI = i.value;
+    let currI = i.currency;
     if (data[0][1] === "CZK") {
-      valueI = CURR_I;
-      currI = VALUE_I;
+      valueI = i.currency;
+      currI = i.value;
     }
 
     let transactions = [];
     data.forEach(row => {
-      if (row.length > SPECIFIC_CODE_I + 1) {
+      if (row.length > i.sc + 1) {
         let value = +(row[valueI].replace(/"/g, "").replace(",", "."));
-        let code = row[ACC_I].trim();
+        let code = row[i.code].trim();
         if (data[0][1] === "CZK") {
           code = code.split(/0000+/)[1];
         }
@@ -121,13 +143,13 @@ export default class Balance {
           code,
           value: value,
           currency: row[currI].trim(),
-          date: parseDate(row[DATE_I] || row[DATE_TEMP_I]),
-          account: /^\d+(?:-\d*)?/.test(row[BANK_ACC_I].trim()) ? [row[BANK_ACC_I].trim(), row[BANK_NUM_I].trim()].join("/") : null,
-          accountName: row[BANK_ACC_NAME_I].trim() || null,
-          details: Balance.range(row, DETAILS_I_START, DETAILS_I_END).join("\n"),
-          cc: row[CONSTANT_CODE_I].trim() || null,
-          vc: row[VARIABLE_CODE_I].trim() || null,
-          sc: row[SPECIFIC_CODE_I].trim() || null
+          date: parseDate(row[i.date] || row[i.dateTemp]),
+          account: /^\d+(?:-\d*)?/.test(row[i.accountNumber].trim()) ? [row[i.accountNumber].trim(), row[i.accountCode].trim()].join("/") : null,
+          accountName: row[i.accountName].trim() || null,
+          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          cc: row[i.cc].trim() || null,
+          vc: row[i.vc].trim() || null,
+          sc: row[i.sc].trim() || null
         });
 
         transactions.push(tx);
@@ -145,21 +167,52 @@ export default class Balance {
       data.shift();
     }
 
+    const i = CSV_INDEXES.kb;
+
     const transactions = [];
-    data.forEach(row => {
-      if (row.length > DETAILS_I_END_KB + 1) {
-        let value = +(row[VALUE_I_KB].replace(/"/g, "").replace(",", "."));
+    data.forEach((row) => {
+      if (row.length > i.detailEnd + 1) {
+        let value = +(row[i.value].replace(/"/g, "").replace(",", "."));
         let tx = new Transaction({
           code: accountCode,
           value: value,
           currency: "CZK",
-          date: parseDate(row[DATE_I_KB] || row[DATE_TEMP_I_KB]),
-          account: row[BANK_ACC_I_KB].trim(),
-          accountName: row[BANK_ACC_NAME_I_KB].trim() || null,
-          details: Balance.range(row, DETAILS_I_START_KB, DETAILS_I_END_KB).join("\n"),
-          cc: row[CONSTANT_CODE_I_KB].trim().replace(/^0$/, "") || null,
-          vc: row[VARIABLE_CODE_I_KB].trim().replace(/^0$/, "") || null,
-          sc: row[SPECIFIC_CODE_I_KB].trim().replace(/^0$/, "") || null
+          date: parseDate(row[i.date] || row[i.dateTemp]),
+          account: row[i.account].trim(),
+          accountName: row[i.accountName].trim() || null,
+          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          cc: row[i.cc].trim().replace(/^0$/, "") || null,
+          vc: row[i.vc].trim().replace(/^0$/, "") || null,
+          sc: row[i.sc].trim().replace(/^0$/, "") || null,
+        });
+
+        transactions.push(tx);
+      }
+    });
+
+    return transactions;
+  }
+
+  static _getMonetaTx(data) {
+    data.shift();
+
+    const i = CSV_INDEXES.moneta;
+
+    const transactions = [];
+    data.forEach((row) => {
+      if (row.length > 1) {
+        let value = +(row[i.value].replace(/"/g, "").replace(",", "."));
+        let tx = new Transaction({
+          code: row[i.code].match(/^[0-9-]+/)[0],
+          value: value,
+          currency: row[i.currency],
+          date: parseDate(row[i.date] || row[i.dateTemp]),
+          account: row[i.accountNumber] ? [row[i.accountNumber].trim(), row[i.accountCode].trim()].join("/") : null,
+          accountName: row[i.accountName].trim() || null,
+          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          cc: row[i.cc].trim().replace(/^0$/, "") || null,
+          vc: row[i.vc].trim().replace(/^0$/, "") || null,
+          sc: row[i.sc].trim().replace(/^0$/, "") || null,
         });
 
         transactions.push(tx);
@@ -170,10 +223,15 @@ export default class Balance {
   }
 
   static getTransactions(data) {
-    if (data[4][0] !== "IBAN") {
-      return Balance._getUCTx(data);
-    } else {
+    if (data[2] && /^U KONTO/.test(data[2][0])) {
+      console.log("ucb");
+      return Balance._getUCBTx(data);
+    } else if (data[4] && data[4][0] === "IBAN") {
+      console.log("kb");
       return Balance._getKBTx(data);
+    } else {
+      console.log("moneta");
+      return Balance._getMonetaTx(data);
     }
   }
 

@@ -95,7 +95,7 @@ export default class Category {
     "flat-prague-hypothec": {
       name: "Hypotéka bytu v Praze",
       isValid(tx) {
-        return !tx.account && (/00002192-350/.test(tx.details.replace("\n", "")))
+        return /^27-8386421727\/0100$/.test(tx.account) && tx.cc == 498;
       }
     },
     "flat-prague-fees": {
