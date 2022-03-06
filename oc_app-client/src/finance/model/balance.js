@@ -115,7 +115,7 @@ function parseDate(date) {
 
 export default class Balance {
 
-  static _getUCBx(data) {
+  static _getUCBTx(data) {
     data.shift(); // top
     data.shift(); // header
     data.shift(); // account
@@ -223,7 +223,7 @@ export default class Balance {
   }
 
   static getTransactions(data) {
-    if (data[2] && /^U KONTO/.test(data[2][0])) {
+    if (data[0] && /^Seznam transakcí účtu/.test(data[0][0])) {
       console.log("ucb");
       return Balance._getUCBTx(data);
     } else if (data[4] && data[4][0] === "IBAN") {
