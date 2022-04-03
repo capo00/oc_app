@@ -147,9 +147,9 @@ export default class Balance {
           account: /^\d+(?:-\d*)?/.test(row[i.accountNumber].trim()) ? [row[i.accountNumber].trim(), row[i.accountCode].trim()].join("/") : null,
           accountName: row[i.accountName].trim() || null,
           details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
-          cc: row[i.cc].trim() || null,
-          vc: row[i.vc].trim() || null,
-          sc: row[i.sc].trim() || null
+          cc: row[i.cc]?.trim() || null,
+          vc: row[i.vc]?.trim() || null,
+          sc: row[i.sc]?.trim() || null
         });
 
         transactions.push(tx);
@@ -181,9 +181,9 @@ export default class Balance {
           account: row[i.account].trim(),
           accountName: row[i.accountName].trim() || null,
           details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
-          cc: row[i.cc].trim().replace(/^0$/, "") || null,
-          vc: row[i.vc].trim().replace(/^0$/, "") || null,
-          sc: row[i.sc].trim().replace(/^0$/, "") || null,
+          cc: row[i.cc]?.trim()?.replace(/^0$/, "") || null,
+          vc: row[i.vc]?.trim()?.replace(/^0$/, "") || null,
+          sc: row[i.sc]?.trim()?.replace(/^0$/, "") || null,
         });
 
         transactions.push(tx);
@@ -208,11 +208,11 @@ export default class Balance {
           currency: row[i.currency],
           date: parseDate(row[i.date] || row[i.dateTemp]),
           account: row[i.accountNumber] ? [row[i.accountNumber].trim(), row[i.accountCode].trim()].join("/") : null,
-          accountName: row[i.accountName].trim() || null,
+          accountName: row[i.accountName]?.trim() || null,
           details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
-          cc: row[i.cc].trim().replace(/^0$/, "") || null,
-          vc: row[i.vc].trim().replace(/^0$/, "") || null,
-          sc: row[i.sc].trim().replace(/^0$/, "") || null,
+          cc: row[i.cc]?.trim()?.replace(/^0$/, "") || null,
+          vc: row[i.vc]?.trim()?.replace(/^0$/, "") || null,
+          sc: row[i.sc]?.trim()?.replace(/^0$/, "") || null,
         });
 
         transactions.push(tx);
@@ -250,7 +250,7 @@ export default class Balance {
     let newArray = [];
     let i = min;
     while (i <= max) {
-      let value = array[i].trim();
+      let value = array[i]?.trim();
       value && newArray.push(value);
       i++
     }

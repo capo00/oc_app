@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import createReactClass from "create-react-class";
 import * as UU5 from "uu5g04";
 import "uu5g04-bricks";
@@ -10,6 +10,127 @@ import DataTable from "./data-table.js";
 import PieChart from "./chart/pie-chart.js";
 
 import "./month-summary.less";
+
+function LineChart({ data }) {
+  const [isIncomes, setIsIncomes] = useState(false);
+  const [isCosts, setIsCosts] = useState(false);
+
+  return (
+    <div>
+      <UU5.Bricks.Button
+        onClick={() => {
+          setIsIncomes(false);
+          setIsCosts(false);
+        }}
+        pressed={!isIncomes && !isCosts}
+      >
+        Vše
+      </UU5.Bricks.Button>
+      <UU5.Bricks.Button onClick={() => setIsIncomes(!isIncomes)} pressed={isIncomes}>Příjmy</UU5.Bricks.Button>
+      <UU5.Bricks.Button onClick={() => setIsCosts(!isCosts)} pressed={isCosts}>Výdaje</UU5.Bricks.Button>
+      <UU5.Chart.LineChart data={data} responsive>
+        <UU5.Chart.XAxis dataKey="label" />
+        <UU5.Chart.YAxis unit=" Kč" />
+        <UU5.Chart.Tooltip content={<CustomTooltip isIncomes={isIncomes} isCosts={isCosts} />} />
+        {!isIncomes && !isCosts && [
+          <UU5.Chart.Line
+            key="sumExp"
+            type="monotone"
+            dataKey="sumExp"
+            stroke={UU5.Environment.colors.blue.c500}
+            activeDot={{ r: 8 }}
+          />,
+          <UU5.Chart.Line
+            key="sum"
+            type="monotone"
+            dataKey="sum"
+            stroke={UU5.Environment.colors.grey.c900}
+            activeDot={{ r: 8 }}
+          />
+        ]}
+        {isIncomes && [
+          <UU5.Chart.Line
+            key="incomesExp"
+            type="monotone"
+            dataKey="incomesExp"
+            stroke={UU5.Environment.colors.green.c500}
+            activeDot={{ r: 8 }}
+          />,
+          <UU5.Chart.Line
+            key="incomes"
+            type="monotone"
+            dataKey="incomes"
+            stroke={UU5.Environment.colors.green.c200}
+            activeDot={{ r: 8 }}
+          />
+        ]}
+        {isCosts && [
+          <UU5.Chart.Line
+            key="costsExp"
+            type="monotone"
+            dataKey="costsExp"
+            stroke={UU5.Environment.colors.red.c500}
+            activeDot={{ r: 8 }}
+          />,
+          <UU5.Chart.Line
+            key="costs"
+            type="monotone"
+            dataKey="costs"
+            stroke={UU5.Environment.colors.red.c100}
+            activeDot={{ r: 8 }}
+          />
+        ]}
+      </UU5.Chart.LineChart>
+    </div>
+  )
+}
+
+function PaymentInfo({
+                       payload: { value, account, currency = "CZK", details, category, ...payload },
+                       color,
+                       sumKey,
+                       header
+                     }) {
+  return (
+    <p>
+      {value.toLocaleString("cs", { style: "currency", currency })} ({category})<br />
+      {account}{account ? <br /> : null}
+      {details}
+    </p>
+  )
+}
+
+function getSumRow(payload) {
+  return (header, i) => {
+    const { color, dataKey, payload: data } = payload[i];
+    return (
+      <div key={header} style={{ color }}>
+        <b>{header}:</b> {data[dataKey].toLocaleString("cs", { style: "currency", currency: data.currency })}
+      </div>
+    );
+  }
+}
+
+function CustomTooltip({ active, payload, label, isCosts, isIncomes }) {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{
+        backgroundColor: "#fff",
+        padding: 8,
+        boxShadow: "rgb(33 33 33 / 40%) 1px 2px 10px 0px",
+        maxWidth: "50vw",
+      }}>
+        <h4 style={{ margin: 0 }}>{label}</h4>
+        <PaymentInfo {...payload[0]} />
+        {!isIncomes && !isCosts && ["Pravidelné platby", "Celkem platby"].map(getSumRow(payload))}
+        {isIncomes && ["Pravidelné příjmy", "Celkem příjmy"].map(getSumRow(payload))}
+        {isCosts && ["Pravidelné výdaje", "Celkem výdaje"].map(getSumRow(payload))}
+      </div>
+    );
+  }
+
+  return null;
+};
 
 export const MonthSummary = createReactClass({
 
@@ -204,7 +325,8 @@ export const MonthSummary = createReactClass({
       { label: "Penze", regex: /^pension/ },
       { label: "Dům KH", regex: /^flat-kh/ },
       { label: "Byt Praha", regex: /^flat-prague/ },
-      { label: "Byt Čáslav", regex: /^flat-caslav/ }
+      { label: "Byt Čáslav", regex: /^flat-caslav/ },
+      { label: "OSVČ", regex: /^osvc/ }
     ]).sort((a, b) => {
       if (a.value < b.value) return 1;
       return -1;
@@ -268,6 +390,44 @@ export const MonthSummary = createReactClass({
     if (this.props.data && this.props.data.length && this.state.monthTransactions) {
       let monthTransactions = this.state.monthTransactions;
 
+
+      let sum = 0;
+      let sumExp = 0;
+      let incomes = 0;
+      let incomesExp = 0;
+      let costs = 0;
+      let costsExp = 0;
+      const data = this.state.monthTransactions.transactions.map((tx) => {
+        let account = [];
+        tx.account && account.push(tx.account);
+        tx.accountName && account.push(tx.accountName);
+
+        const label = UU5.Common.Tools.formatDate(tx.date, "d.m.");
+        sum += tx.value;
+        if (tx.value >= 0) incomes += tx.value;
+        if (tx.value < 0) costs += tx.value;
+        if (tx.category) {
+          sumExp += tx.value;
+          if (tx.value >= 0) incomesExp += tx.value;
+          if (tx.value < 0) costsExp += tx.value;
+        }
+
+        return {
+          label,
+          value: tx.value,
+          sum,
+          sumExp,
+          incomes,
+          costs,
+          incomesExp,
+          costsExp,
+          currency: tx.currency,
+          account: account?.join("\n"),
+          details: tx.details,
+          category: tx.category,
+        };
+      });
+
       return (
         <UU5.Bricks.Div {...this.getMainPropsToPass()}>
           <UU5.Bricks.Header level={1} className="center">
@@ -314,6 +474,8 @@ export const MonthSummary = createReactClass({
               <PieChart data={this._getCostsData()} />
             </UU5.Bricks.Column>
           </UU5.Bricks.Row>
+
+          <LineChart data={data} />
 
           {this._getAllTransactions()}
 

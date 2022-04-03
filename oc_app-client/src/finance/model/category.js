@@ -266,6 +266,18 @@ export default class Category {
       isValid(tx) {
         return /^3683572\/0?800$/.test(tx.account) && /^0*1910005754$/.test(tx.vc)
       }
+    },
+    "osvc-health": {
+      name: "OSVČ - zdravotní pojištění",
+      isValid(tx) {
+        return tx.account === "2010201091/0710" && tx.vc === "9006300897";
+      },
+    },
+    "osvc-social": {
+      name: "OSVČ - sociální pojištění",
+      isValid(tx) {
+        return tx.account === "1011-7925161/0710" && tx.vc === "0024573629";
+      },
     }
   };
 
