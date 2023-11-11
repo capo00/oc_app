@@ -36,8 +36,15 @@ export default class Category {
     },
     "insurance-generali": {
       name: "Životní pojištění Generali",
+      state: "closed",
       isValid(tx) {
         return /^100001\/2700$/.test(tx.account) && /^0*9200424111$/.test(tx.vc)
+      }
+    },
+    "insurance-family": {
+      name: "Životní pojištění Allianz - rodina",
+      isValid(tx) {
+        return /^2700\/2700$/.test(tx.account) && /^0*59357222$/.test(tx.vc)
       }
     },
     "investment-cpp-taxes": {
@@ -198,7 +205,7 @@ export default class Category {
     "salary-vigour": {
       name: "Plat ve Vigour",
       isValid(tx) {
-        return /^35-2151040287\/0?100$/.test(tx.account)
+        return /^35-2151040287\/0?100$/.test(tx.account) || /^35-6412870237\/0?100$/.test(tx.account)
       }
     },
     "salary-ucl": {
@@ -211,6 +218,12 @@ export default class Category {
       name: "Plat v USO",
       isValid(tx) {
         return /^51-441400237\/0?100$/.test(tx.account) || /^35-6742920217\/0100$/.test(tx.account)
+      }
+    },
+    "salary-uso-car": {
+      name: "Služební auto",
+      isValid(tx) {
+        return /^35-8035130207\/0100$/.test(tx.account) || tx.vc === "5222900645"
       }
     },
     "mobile-tariff-mom": {
