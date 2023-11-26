@@ -21,6 +21,7 @@ target/
 doc/
 out/
 build/
+metamodel_*.zip
 npm-debug.log
 pnpm-debug.log
 Gemfile.lock

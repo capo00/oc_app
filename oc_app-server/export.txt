@@ -1,4 +1,0 @@
-In command line run:
-  mongoexport --collection=transaction --db=ocAppPrimary --out=transaction.json
-
-File is saved in a folder, where the command was run.
