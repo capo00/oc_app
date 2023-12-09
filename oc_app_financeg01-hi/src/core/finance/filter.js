@@ -26,22 +26,21 @@ const Filter = createVisualComponent({
   render(props) {
     const { date, monthly, onDateChange, onMonthlyChange, accountList, account, onAccountChange, ...restProps } = props;
 
-    let value, dateFrom, dateTo;
+    let value, min, max;
     if (monthly) {
-      value = new UuDate(date).format(undefined, { format: "YYYY-MM" });
-      dateFrom = DATE_FROM.format(undefined, { format: "YYYY-MM" });
-      dateTo = uuDateTo.format(undefined, { format: "YYYY-MM" });
+      value = date.format(undefined, { format: "YYYY-MM" });
+      min = DATE_FROM.format(undefined, { format: "YYYY-MM" });
+      max = uuDateTo.format(undefined, { format: "YYYY-MM" });
     } else {
-      value = date.getFullYear();
-      dateFrom = DATE_FROM.getYear();
-      dateTo = uuDateTo.getYear();
+      value = date.getYear();
+      min = DATE_FROM.getYear();
+      max = uuDateTo.getYear();
     }
 
     const inputProps = {
       value,
-      dateFrom,
-      dateTo,
-      // TODO UuDate
+      min,
+      max,
       onChange: (e) => onDateChange(new UuDate(new Date(e.data.value + ""))),
     };
 

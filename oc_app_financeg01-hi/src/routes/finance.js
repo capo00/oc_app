@@ -1,8 +1,8 @@
 //@@viewOn:imports
 import { createVisualComponent, useState } from "uu5g05";
 import { withRoute } from "uu_plus4u5g02-app";
-import { dateTo } from "../core/finance/filter";
-
+import { UuDate } from "uu_i18ng01";
+import { uuDateTo } from "../core/finance/filter";
 import Config from "./config/config.js";
 import TransactionProvider from "../core/finance/transaction-provider";
 import FinanceView from "../core/finance/finance-view";
@@ -33,10 +33,10 @@ let Finance = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const [date, setDate] = useState(() => {
-      let date = new Date();
-      date.setMonth(date.getMonth() - 1);
+      let date = new UuDate();
+      date.shiftMonth(-1);
 
-      if (date > dateTo) date = dateTo;
+      if (UuDate.compare(date, uuDateTo) > 0) date = uuDateTo;
 
       return date;
     });

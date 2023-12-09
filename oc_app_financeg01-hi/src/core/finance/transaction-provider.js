@@ -7,11 +7,9 @@ import Config from "../config/config.js";
 import Calls from "calls";
 //@@viewOff:imports
 
-export function prepareDtoIn(date, monthly) {
+export function prepareDtoIn(uuDate, monthly) {
   let dateFrom;
   let dateTo;
-
-  const uuDate = new UuDate(date);
 
   if (monthly) {
     dateFrom = new UuDate(uuDate).startOfMonth();
@@ -54,7 +52,7 @@ const TransactionProvider = createVisualComponent({
       },
     });
 
-    const { state, errorData, handlerMap } = txDto;
+    const { state, errorData, handlerMap, pendingData } = txDto;
 
     const { addAlert } = useAlertBus();
 

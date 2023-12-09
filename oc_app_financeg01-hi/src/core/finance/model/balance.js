@@ -106,7 +106,7 @@ const CSV_INDEXES = {
 };
 
 function parseDate(date) {
-  return new UuDate.parse(date).toIsoString();
+  return UuDate.parse(date).toIsoString();
 }
 
 export default class Balance {

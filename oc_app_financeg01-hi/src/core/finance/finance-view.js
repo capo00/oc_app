@@ -1,12 +1,12 @@
 //@@viewOn:imports
-import { createVisualComponent, useState } from "uu5g05";
+import { createVisualComponent, useMemo, useState } from "uu5g05";
 import Uu5Elements from "uu5g05-elements";
 import Filter from "./filter";
-
 import Config from "../config/config.js";
 import { prepareDtoIn } from "./transaction-provider";
 import TransactionsImport from "./transactions-import";
 import MonthSummary from "./month-summary";
+import YearSummary from "./year-summary";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -37,7 +37,10 @@ const FinanceView = createVisualComponent({
 
     const [importOpen, setImportOpen] = useState(false);
 
-    const accountList = txDto.data ? [...new Set(txDto.data.map(({ data }) => data.code))] : null;
+    const accountList = useMemo(
+      () => (txDto.data ? [...new Set(txDto.data.map(({ data }) => data.code))] : null),
+      [txDto.data]
+    );
     const [account, setAccount] = useState(null);
 
     async function handleImport(data) {
@@ -50,7 +53,13 @@ const FinanceView = createVisualComponent({
     //@@viewOff:interface
 
     //@@viewOn:render
-    const Summary = monthly ? MonthSummary : "div";
+    const Summary = monthly ? MonthSummary : YearSummary;
+
+    const sumData = useMemo(() => {
+      return txDto.data.filter(({ data }) =>
+        account ? data.code === account : !accountList.find((ac) => data.account?.startsWith(ac))
+      );
+    }, [txDto.data, account, accountList]);
 
     return (
       <>
@@ -72,13 +81,10 @@ const FinanceView = createVisualComponent({
             onAccountChange={setAccount}
             className={Config.Css.css({ marginBottom: 32 })}
           />
-          {txDto.data.length ? (
-            <Summary
-              data={txDto.data.filter(({ data }) =>
-                account ? data.code === account : !accountList.find((ac) => data.account?.startsWith(ac))
-              )}
-              date={date}
-            />
+          {txDto.state === "pending" && txDto.pendingData.operation === "load" ? (
+            <Uu5Elements.Pending size="max" />
+          ) : txDto.data.length ? (
+            <Summary data={sumData} date={date} />
           ) : (
             <Uu5Elements.PlaceholderBox code="items" />
           )}

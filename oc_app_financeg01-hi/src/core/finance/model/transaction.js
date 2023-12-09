@@ -33,7 +33,7 @@ export default class Transaction {
 
   toObject() {
     let tx = this.constructor._buildKeys(this);
-    tx.date = tx.date.toISOString().replace(/T.*/, "");
+    tx.date = tx.date.toIsoString();
     return tx;
   }
 
