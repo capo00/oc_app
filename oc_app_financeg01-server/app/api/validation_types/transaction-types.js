@@ -19,7 +19,9 @@ const importDtoInType = shape({
 
 const listDtoInType = shape({
   dateFrom: date().isRequired(),
-  dateTo: date().isRequired()
+  dateTo: date().isRequired(),
+  category: string(),
+  code: string()
 });
 
 const updateDtoInType = shape({

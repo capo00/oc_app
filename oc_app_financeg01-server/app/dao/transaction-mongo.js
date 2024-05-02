@@ -12,9 +12,10 @@ class TransactionMongo extends UuObjectDao {
   }
 
   list(awid, search) {
-    return super.find({ awid: awid, date: { $gte: search.dateFrom, $lte: search.dateTo } }, search.pageInfo, {
-      date: 1,
-    });
+    const dtoIn = { awid: awid, date: { $gte: search.dateFrom, $lte: search.dateTo } };
+    if (search.category) dtoIn.category = search.category;
+    if (search.code) dtoIn.code = search.code;
+    return super.find(dtoIn, search.pageInfo, { date: 1 });
   }
 
   update(filter, uuObject) {

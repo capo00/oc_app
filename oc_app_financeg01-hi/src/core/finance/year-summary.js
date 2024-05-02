@@ -2,10 +2,12 @@
 import { createVisualComponent, useEffect, useState, Utils } from "uu5g05";
 import Uu5Elements from "uu5g05-elements";
 import Uu5Charts from "uu5chartsg01";
+import { UuDate } from "uu_i18ng01";
 import Config from "../config/config.js";
 import YearTransactions from "./model/year-transactions";
 import DataTable from "./data-table";
 import MonthSummary from "./month-summary";
+import Categories from "./categories";
 
 //@@viewOff:imports
 
@@ -183,12 +185,15 @@ const YearSummary = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-    const { data, date } = props;
+    const { data, date, account } = props;
 
     const [tx, setTx] = useState(() => new YearTransactions(data));
     useEffect(() => setTx(new YearTransactions(data)), [data]);
 
     const [modal, setModal] = useState();
+
+    const dateFrom = new UuDate(date).startOfYear().toIsoString();
+    const dateTo = new UuDate(date).shiftYear(1).startOfYear().toIsoString();
 
     //@@viewOn:render
     return (
@@ -215,6 +220,16 @@ const YearSummary = createVisualComponent({
 
           <Uu5Charts.XyChart {...getDataForBarChart(tx, (modalProps) => setModal(modalProps))} />
         </Uu5Elements.Block>
+
+        <Categories
+          txList={Object.values(tx.transactions)
+            .map((tx) => tx.transactions)
+            .flat()}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          account={account}
+        />
+
         {modal && <Uu5Elements.Modal {...modal} open onClose={() => setModal(null)} />}
       </>
     );

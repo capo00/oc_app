@@ -5,6 +5,9 @@ import Uu5Charts from "uu5chartsg01";
 import Config from "../config/config.js";
 import MonthTransactions from "./model/month-transactions";
 import DataTable from "./data-table";
+import Categories from "./categories";
+import Category from "./model/category";
+import { UuDate } from "uu_i18ng01";
 //@@viewOff:imports
 
 function Amount({ value }) {
@@ -54,7 +57,7 @@ function FinPartRow({ name, value, data, colorScheme }) {
 
 function _getTxData(txs, groups = [], onModal) {
   let categories = groups.map((gr) => ({
-    label: gr.label,
+    ...gr,
     value: 0,
     transactions: [],
   }));
@@ -64,12 +67,11 @@ function _getTxData(txs, groups = [], onModal) {
   txs.forEach((tx, i) => {
     let value = tx.value > 0 ? tx.value : tx.value * -1;
 
-    let index = groups.findIndex((gr) => gr.regex.test(tx.category));
-    if (index > -1) {
-      categories[index].value += value;
-      categories[index].transactions.push(tx);
-      categories[index].onClick = () =>
-        onModal(categories[index].label, categories[index].value, categories[index].transactions);
+    let group = Category.findGroup(tx.category, categories);
+    if (group) {
+      group.value += value;
+      group.transactions.push(tx);
+      group.onClick = () => onModal(group.name, group.value, group.transactions);
     } else {
       const label = tx.getCategoryTitle();
       const foundTxIndex = data.findIndex((t) => t.label === label);
@@ -108,7 +110,7 @@ function getDataForPieChart(sum, expected, expectedData, unexpectedData, groups,
     let label = "Nečekané";
     data.push({
       key: "unexpected",
-      label,
+      name: label,
       value: Math.abs(unexpectedValue),
       onClick: () => onModal(label, unexpectedValue, unexpectedData),
     });
@@ -119,7 +121,7 @@ function getDataForPieChart(sum, expected, expectedData, unexpectedData, groups,
     serieList: [
       {
         valueKey: "value",
-        labelKey: "label",
+        labelKey: "name",
         unit: "Kč",
         color: ({ key }) => (key === "unexpected" ? "grey" : undefined),
         label: [{ position: "outside", type: "label" }],
@@ -191,10 +193,13 @@ const MonthSummary = createVisualComponent({
   //@@viewOff:defaultProps
 
   render(props) {
-    const { data, date } = props;
+    const { data, date, account } = props;
 
     const [tx, setTx] = useState(() => new MonthTransactions(data));
     useEffect(() => setTx(new MonthTransactions(data)), [data]);
+
+    const dateFrom = new UuDate(date).startOfMonth().toIsoString();
+    const dateTo = new UuDate(date).shiftMonth(1).startOfMonth().toIsoString();
 
     //@@viewOn:render
     return (
@@ -207,7 +212,7 @@ const MonthSummary = createVisualComponent({
             expected={tx.incomesExpected}
             expectedData={tx.incomesExpectedTransactions}
             unexpectedData={tx.incomesUnexpectedTransactions}
-            groups={[{ label: "Tarify", regex: /^mobile-tarif/ }]}
+            groups={Category.GROUP_LIST}
           />
           <FinPart
             name="výdaje"
@@ -216,16 +221,11 @@ const MonthSummary = createVisualComponent({
             expected={tx.costsExpected}
             expectedData={tx.costsExpectedTransactions}
             unexpectedData={tx.costsUnexpectedTransactions}
-            groups={[
-              { label: "Pojištění", regex: /^insurance/ },
-              { label: "Penze", regex: /^pension/ },
-              { label: "Dům KH", regex: /^flat-kh/ },
-              { label: "Byt Praha", regex: /^flat-prague/ },
-              { label: "Byt Čáslav", regex: /^flat-caslav/ },
-              { label: "OSVČ", regex: /^osvc/ },
-            ]}
+            groups={Category.GROUP_LIST}
           />
         </Uu5Elements.Grid>
+
+        <Categories txList={tx.transactions} dateFrom={dateFrom} dateTo={dateTo} account={account} />
       </Uu5Elements.Block>
     );
     //@@viewOff:render

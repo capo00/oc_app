@@ -52,6 +52,12 @@ export default class Category {
         return /^700135002\/0800$/.test(tx.account) && /^0*7319783282$/.test(tx.vc);
       },
     },
+    "investment-conseq-taxes": {
+      name: "Conseq investice + daně",
+      isValid(tx) {
+        return /^666777-9606017000\/2700$/.test(tx.account);
+      },
+    },
     "investment-investika-5": {
       name: "Investice Investika - 5let",
       state: "closed",
@@ -301,6 +307,23 @@ export default class Category {
       },
     },
   };
+
+  static GROUP_LIST = [
+    { name: "Tarify", regex: /^mobile-tarif/ },
+    { name: "Plat", regex: /^salary/ },
+    { name: "Pojištění", regex: /^insurance/ },
+    { name: "Investice", regex: /^investment/ },
+    { name: "Penze", regex: /^pension/ },
+    { name: "Dům KH", regex: /^house-karlov/ },
+    { name: "Byt Praha", regex: /^flat-prague/ },
+    { name: "Byt Čáslav", regex: /^flat-caslav/ },
+    { name: "OSVČ", regex: /^osvc/ },
+  ];
+
+  static findGroup(category, groupList = this.GROUP_LIST) {
+    const index = groupList.findIndex((gr) => gr.regex.test(category));
+    if (index > -1) return groupList[index];
+  }
 
   static get(tx) {
     let category = null;

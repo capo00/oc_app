@@ -40,7 +40,14 @@ const DataTable = createVisualComponent({
             {
               value: "date",
               header: "Datum",
-              cell: ({ data }) => <Uu5Elements.DateTime value={data.date} timeFormat="none" dateFormat="short" />,
+              cell: ({ data }) => (
+                <Uu5Elements.DateTime
+                  value={data.date.toIsoString?.() ?? data.date}
+                  timeFormat="none"
+                  dateFormat="short"
+                />
+              ),
+              cellComponent: <Uu5TilesElements.Table.Cell horizontalAlignment="right" />,
               maxWidth: "max-content",
             },
             {

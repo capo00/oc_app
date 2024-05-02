@@ -84,7 +84,7 @@ const FinanceView = createVisualComponent({
           {txDto.state === "pending" && txDto.pendingData.operation === "load" ? (
             <Uu5Elements.Pending size="max" />
           ) : txDto.data.length ? (
-            <Summary data={sumData} date={date} />
+            <Summary data={sumData} date={date} account={account} />
           ) : (
             <Uu5Elements.PlaceholderBox code="items" />
           )}
