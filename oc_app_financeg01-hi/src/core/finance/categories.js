@@ -5,6 +5,7 @@ import Config from "../config/config.js";
 import Calls from "calls";
 import DataTable from "./data-table";
 import Category from "./model/category";
+import Amount from "./amount";
 
 //@@viewOff:imports
 
@@ -51,15 +52,17 @@ const Categories = createVisualComponent({
     const [category, setCategory] = useState();
 
     const groups = {};
-    const groupOther = new Set();
+    const groupOther = {};
     txList.forEach((tx) => {
       if (tx.category) {
         const group = Category.findGroup(tx.category);
         if (group) {
-          groups[group.name] ||= new Set();
-          groups[group.name].add(tx.category);
+          groups[group.name] ||= {};
+          groups[group.name][tx.category] ??= 0;
+          groups[group.name][tx.category] += tx.value;
         } else {
-          groupOther.add(tx.category);
+          groupOther[tx.category] ??= 0;
+          groupOther[tx.category] += tx.value;
         }
       }
     });
@@ -86,8 +89,13 @@ const Categories = createVisualComponent({
               >
                 <legend className={Config.Css.css({ paddingInline: 8 })}>{groupName}</legend>
                 <Uu5Elements.MenuList
-                  itemList={[...groups[groupName]].map((cat) => ({
-                    children: Category.CONFIG[cat].name,
+                  itemList={Object.entries(groups[groupName]).map(([cat, amount]) => ({
+                    children: (
+                      <div className={Config.Css.css({ display: "flex", justifyContent: "space-between", width: "100%" })}>
+                        <span>{Category.CONFIG[cat].name}</span>
+                        <span><Amount value={amount} /></span>
+                      </div>
+                    ),
                     onClick: () => setCategory(cat),
                     tooltip: cat,
                   }))}

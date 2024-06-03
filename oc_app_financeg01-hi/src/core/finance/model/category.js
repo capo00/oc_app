@@ -254,7 +254,7 @@ export default class Category {
       isValid(tx) {
         return (
           (/^107-2704330277\/0?100$/.test(tx.account) || /^1410591004\/2700$/.test(tx.account)) &&
-          (tx.value === 299 || tx.value === 399 || tx.value === 549 || tx.value === 339)
+          (tx.value === 299 || tx.value === 399 || tx.value === 549 || tx.value === 339 || tx.value === 689)
         );
       },
     },
@@ -273,7 +273,7 @@ export default class Category {
     "mobile-tariff-jana": {
       name: "Tarif Jana",
       isValid(tx) {
-        return /^933401113\/0?800$/.test(tx.account) && (tx.value === 129 || tx.value === 149);
+        return /^933401113\/0?800$/.test(tx.account) && (tx.value === 129 || tx.value === 149 || tx.value === 169);
       },
     },
     "mobile-tariff-lenimamka": {
@@ -285,7 +285,7 @@ export default class Category {
     "mobile-tariff-renca": {
       name: "Tarif Renča",
       isValid(tx) {
-        return /^2500836292\/2010$/.test(tx.account) && (tx.value === 149 || tx.value === 239);
+        return /^2500836292\/2010$/.test(tx.account) && (tx.value === 149 || tx.value === 239 || tx.value === 309);
       },
     },
     "car-fabia-credit": {

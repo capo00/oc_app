@@ -2,21 +2,14 @@
 import { createVisualComponent, useEffect, useState, Utils } from "uu5g05";
 import Uu5Elements from "uu5g05-elements";
 import Uu5Charts from "uu5chartsg01";
+import { UuDate } from "uu_i18ng01";
 import Config from "../config/config.js";
 import MonthTransactions from "./model/month-transactions";
 import DataTable from "./data-table";
 import Categories from "./categories";
 import Category from "./model/category";
-import { UuDate } from "uu_i18ng01";
+import Amount from "./amount";
 //@@viewOff:imports
-
-function Amount({ value }) {
-  return (
-    <Uu5Elements.Text colorScheme={value < 0 ? "negative" : "positive"}>
-      <Uu5Elements.Number value={value} currency="CZK" />
-    </Uu5Elements.Text>
-  );
-}
 
 function TxModal({ header, amount, data, onClose }) {
   return (

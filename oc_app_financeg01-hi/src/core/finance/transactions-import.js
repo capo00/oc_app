@@ -23,6 +23,7 @@ const TransactionsImport = createVisualComponent({
 
   render(props) {
     const { onImport } = props;
+    const [counter, setCounter] = useState(0);
 
     function handleChange(e) {
       if (e.data.value) {
@@ -42,25 +43,24 @@ const TransactionsImport = createVisualComponent({
       }
     }
 
-    function handleSubmit(e) {
-      onImport({
+    async function handleSubmit(e) {
+      await onImport({
         data:
           typeof e.data.value.transactions === "string"
             ? JSON.parse(e.data.value.transactions)
             : e.data.value.transactions,
       });
+      setCounter(counter + 1);
     }
 
     //@@viewOn:render
     return (
-      <Uu5Forms.Form onSubmit={handleSubmit}>
+      <Uu5Forms.Form key={counter} onSubmit={handleSubmit}>
         <Uu5Forms.FormFile name="file" label="Export z banky" onChange={handleChange} required />
 
         <Uu5Forms.SubmitButton />
 
-        <Uu5Elements.Panel header="Data">
-          <Uu5CodeKit.FormJson name="transactions" format="pretty" maxRows={1000} displayGutter={false} />
-        </Uu5Elements.Panel>
+        <Uu5CodeKit.FormJson name="transactions" format="pretty" maxRows={1000} displayGutter={false} />
       </Uu5Forms.Form>
     );
     //@@viewOff:render
