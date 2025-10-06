@@ -101,7 +101,7 @@ export default class Category {
     "flat-caslav-hypothec": {
       name: "Hypotéka bytu v Čáslavi",
       isValid(tx) {
-        return /^27-8378231747\/0100$/.test(tx.account) && tx.cc == 498;
+        return (/^27-8378231747\/0100$/.test(tx.account) || /^855838159\/0800$/.test(tx.account)) && tx.cc == 498;
       },
     },
     "flat-prague-hypothec": {
@@ -138,6 +138,12 @@ export default class Category {
       name: "Pronájem bytu v Praze",
       isValid(tx) {
         return /31310$/.test(tx.vc) || tx.account === "4484193053/0800";
+      },
+    },
+    "flat-prague-insurance": {
+      name: "Pojištění bytu v Praze",
+      isValid(tx) {
+        return "246246/5500" === tx.account && tx.vc == 4688332046;
       },
     },
     "flat-kh-hypothec": {
@@ -187,7 +193,7 @@ export default class Category {
     "house-karlov-el": {
       name: "Elektrika v domě v KH",
       isValid(tx) {
-        return /^7770227\/0100$/.test(tx.account) && /^0*7453854100$/.test(tx.vc);
+        return /^7770227\/0100$/.test(tx.account) && /^0*7675181400$/.test(tx.vc);
       },
     },
     "house-karlov-water": {
@@ -200,6 +206,18 @@ export default class Category {
       name: "Internet v domě v KH",
       isValid(tx) {
         return /^3947727329\/0800$/.test(tx.account) && /^0*48208$/.test(tx.vc);
+      },
+    },
+    "house-karlov-o2": {
+      name: "O2 v domě v KH",
+      isValid(tx) {
+        return /^500114004\/2700$/.test(tx.account);
+      },
+    },
+    "house-karlov-tv": {
+      name: "Poplatek TV",
+      isValid(tx) {
+        return /^8029-1800060583\/0300$/.test(tx.account) && /^0*8940946927$/.test(tx.vc);
       },
     },
     "flat-kh-rent": {
@@ -231,6 +249,18 @@ export default class Category {
         return /^51-441400237\/0?100$/.test(tx.account) || /^35-6742920217\/0100$/.test(tx.account);
       },
     },
+    "salary-usy": {
+      name: "Plat v USY",
+      isValid(tx) {
+        return /^19-3196300227\/0?100$/.test(tx.account);
+      },
+    },
+    "salary-ubs": {
+      name: "Plat v UBS",
+      isValid(tx) {
+        return /^131-3001060287\/0?100$/.test(tx.account);
+      },
+    },
     "salary-uso-car": {
       name: "Služební auto",
       isValid(tx) {
@@ -240,13 +270,13 @@ export default class Category {
     "mobile-tariff-mom": {
       name: "Tarif mamka",
       isValid(tx) {
-        return (/^19-6302630267\/0?100$/.test(tx.account) || /^4568200003\/0800$/.test(tx.account)) && tx.value === 150;
+        return (/^19-6302630267\/0?100$/.test(tx.account) || /^4568200003\/0800$/.test(tx.account)) && tx.value === 170;
       },
     },
     "mobile-tariff-dad": {
       name: "Tarif taťka",
       isValid(tx) {
-        return /^284032222\/0?300$/.test(tx.account) && tx.value === 149;
+        return /^284032222\/0?300$/.test(tx.account) && tx.value === 170;
       },
     },
     "mobile-tariff-petra": {
@@ -261,17 +291,18 @@ export default class Category {
     "mobile-tariff-ales": {
       name: "Tarif Aleš",
       isValid(tx) {
-        return /^214354146\/0?600$/.test(tx.account) && (tx.value === 299 || tx.value === 550);
+        return /^214354146\/0?600$/.test(tx.account) && tx.value === 689;
       },
     },
     "mobile-tariff-david": {
       name: "Tarif David",
       isValid(tx) {
-        return /^2862765073\/0?800$/.test(tx.account) && (tx.value === 129 || tx.value === 149);
+        return /^2862765073\/0?800$/.test(tx.account) && tx.value === 169;
       },
     },
     "mobile-tariff-jana": {
       name: "Tarif Jana",
+      state: "closed",
       isValid(tx) {
         return /^933401113\/0?800$/.test(tx.account) && (tx.value === 129 || tx.value === 149 || tx.value === 169);
       },
@@ -279,7 +310,7 @@ export default class Category {
     "mobile-tariff-lenimamka": {
       name: "Tarif Leni mamka",
       isValid(tx) {
-        return /^2867661193\/0?800$/.test(tx.account) && tx.value === 150;
+        return /^2867661193\/0?800$/.test(tx.account) && tx.value === 203;
       },
     },
     "mobile-tariff-renca": {
@@ -290,6 +321,7 @@ export default class Category {
     },
     "car-fabia-credit": {
       name: "Úvěr Fabia",
+      state: "closed",
       isValid(tx) {
         return /^3683572\/0?800$/.test(tx.account) && /^0*1910005754$/.test(tx.vc);
       },
@@ -297,7 +329,7 @@ export default class Category {
     "osvc-health": {
       name: "OSVČ - zdravotní pojištění",
       isValid(tx) {
-        return tx.account === "2010201091/0710" && tx.vc === "9006300897";
+        return (tx.account === "2010201091/0710" || tx.account === "1112001221/0710") && tx.vc == "9006300897";
       },
     },
     "osvc-social": {

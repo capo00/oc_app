@@ -117,6 +117,34 @@ const CSV_INDEXES = {
     vc: 12,
     sc: 14,
   },
+  revolut: {
+    code: "Revolut",
+    value: 5,
+    currency: 7,
+    date: 3,
+    dateTemp: 2,
+    account: 10,
+    accountName: 11,
+    detailStart: 4,
+    detailEnd: 4,
+    cc: 12,
+    vc: 13,
+    sc: 14,
+  },
+  cs: {
+    code: 1,
+    value: 8,
+    currency: 9,
+    date: 2,
+    dateTemp: undefined,
+    account: 6,
+    accountName: 3,
+    detailStart: 13,
+    detailEnd: 19,
+    cc: 10,
+    vc: 12,
+    sc: 11,
+  },
 };
 
 function parseDate(date, loc) {
@@ -262,6 +290,64 @@ export default class Balance {
     return transactions;
   }
 
+  static _getRevolutTx(data) {
+    data.shift();
+
+    const i = CSV_INDEXES.revolut;
+
+    const transactions = [];
+    data.forEach((row) => {
+      if (row.length > 1) {
+        let value = +row[i.value].replace(/"/g, "").replace(",", ".");
+        let tx = new Transaction({
+          code: typeof i.code === "number" ? row[i.code] : i.code,
+          value: value,
+          currency: row[i.currency],
+          date: parseDate((row[i.date] || row[i.dateTemp]).split(" ")[0], "en-gb"),
+          account: row[i.account],
+          accountName: row[i.accountName]?.trim() || null,
+          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          cc: row[i.cc]?.trim()?.replace(/^0$/, "") || null,
+          vc: row[i.vc]?.trim()?.replace(/^0$/, "") || null,
+          sc: row[i.sc]?.trim()?.replace(/^0$/, "") || null,
+        });
+
+        transactions.push(tx.toObject());
+      }
+    });
+
+    return transactions;
+  }
+
+  static _getCSTx(data) {
+    data.shift();
+
+    const i = CSV_INDEXES.cs;
+
+    const transactions = [];
+    data.forEach((row) => {
+      if (row.length > 1) {
+        let value = +row[i.value].replace(/"/g, "").replace(",", ".").replace(/\s+/g, "");
+        let tx = new Transaction({
+          code: typeof i.code === "number" ? row[i.code] : i.code,
+          value: value,
+          currency: row[i.currency],
+          date: parseDate(row[i.date]),
+          account: row[i.account],
+          accountName: row[i.accountName]?.trim() || null,
+          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          cc: row[i.cc]?.trim()?.replace(/^0$/, "") || null,
+          vc: row[i.vc]?.trim()?.replace(/^0$/, "") || null,
+          sc: row[i.sc]?.trim()?.replace(/^0$/, "") || null,
+        });
+
+        transactions.push(tx.toObject());
+      }
+    });
+
+    return transactions;
+  }
+
   static getTransactions(data) {
     if (data[0] && /^Seznam transakcí účtu/.test(data[0][0])) {
       return Balance._getUCBTx(data);
@@ -269,6 +355,10 @@ export default class Balance {
       return Balance._getKBTx(data);
     } else if (data[0]?.[1] === "IBAN") {
       return Balance._getMonetaTx(data);
+    } else if (data[0]?.[0] === "Type") {
+      return Balance._getRevolutTx(data);
+    } else if (data[0]?.[4] === "IBAN") {
+      return Balance._getCSTx(data);
     } else {
       return Balance._getAirTx(data);
     }
