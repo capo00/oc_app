@@ -338,6 +338,12 @@ export default class Category {
         return tx.account === "1011-7925161/0710" && tx.vc === "0024573629";
       },
     },
+    "revolut": {
+      name: "Revolut",
+      isValid(tx) {
+        return tx.accountName?.startsWith("Revolut");
+      },
+    },
   };
 
   static GROUP_LIST = [
@@ -350,6 +356,7 @@ export default class Category {
     { name: "Byt Praha", regex: /^flat-prague/ },
     { name: "Byt Čáslav", regex: /^flat-caslav/ },
     { name: "OSVČ", regex: /^osvc/ },
+    { name: "Revolut", regex: /^revolut/ },
   ];
 
   static findGroup(category, groupList = this.GROUP_LIST) {

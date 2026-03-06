@@ -355,7 +355,7 @@ export default class Balance {
       return Balance._getKBTx(data);
     } else if (data[0]?.[1] === "IBAN") {
       return Balance._getMonetaTx(data);
-    } else if (data[0]?.[0] === "Type") {
+    } else if (["Type", "Typ"].includes(data[0]?.[0])) {
       return Balance._getRevolutTx(data);
     } else if (data[0]?.[4] === "IBAN") {
       return Balance._getCSTx(data);
