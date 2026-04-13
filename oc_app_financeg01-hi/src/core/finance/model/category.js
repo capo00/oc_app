@@ -233,7 +233,8 @@ export default class Category {
         return (
           /^35-2151040287\/0?100$/.test(tx.account) ||
           /^35-6412870237\/0?100$/.test(tx.account) ||
-          /^19-3193360267\/0100$/.test(tx.account)
+          /^19-3193360267\/0100$/.test(tx.account) ||
+          /^35-6412750227\/0100$/.test(tx.account)
         );
       },
     },

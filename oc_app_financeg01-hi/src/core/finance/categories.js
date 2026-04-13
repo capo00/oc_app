@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import { createVisualComponent, useDataObject, useState, Utils } from "uu5g05";
+import { createVisualComponent, useDataList, useState, Utils } from "uu5g05";
 import Uu5Elements from "uu5g05-elements";
 import Config from "../config/config.js";
 import Calls from "calls";
@@ -10,9 +10,12 @@ import Amount from "./amount";
 //@@viewOff:imports
 
 function CategoryList({ category, dateFrom, dateTo, account }) {
-  const { state, data } = useDataObject({
+  const { state, data } = useDataList({
     handlerMap: {
       load: () => Calls.loadTransactions({ category, account, dateFrom, dateTo }),
+    },
+    itemHandlerMap: {
+      update: Calls.updateTransaction,
     },
   });
 
@@ -23,7 +26,7 @@ function CategoryList({ category, dateFrom, dateTo, account }) {
       result = <Uu5Elements.Pending size="xl" />;
       break;
     case "ready":
-      const sortedList = data.itemList.toSorted((itemA, itemB) => (itemA.date > itemB.date ? -1 : 1));
+      const sortedList = data.toSorted((itemA, itemB) => (itemA.data.date > itemB.data.date ? -1 : 1));
       result = <DataTable data={sortedList} />;
       break;
     default:
@@ -89,16 +92,18 @@ const Categories = createVisualComponent({
               >
                 <legend className={Config.Css.css({ paddingInline: 8 })}>{groupName}</legend>
                 <Uu5Elements.MenuList
-                  itemList={Object.entries(groups[groupName]).map(([cat, amount]) => ({
-                    children: (
-                      <div className={Config.Css.css({ display: "flex", justifyContent: "space-between", width: "100%" })}>
-                        <span>{Category.CONFIG[cat].name}</span>
-                        <span><Amount value={amount} /></span>
-                      </div>
-                    ),
-                    onClick: () => setCategory(cat),
-                    tooltip: cat,
-                  }))}
+                  itemList={Object.entries(groups[groupName]).map(([cat, amount]) => {
+                    return {
+                      children: (
+                        <div className={Config.Css.css({ display: "flex", justifyContent: "space-between", width: "100%" })}>
+                          <span>{Category.CONFIG[cat].name}</span>
+                          <span><Amount value={amount} /></span>
+                        </div>
+                      ),
+                      onClick: () => setCategory(cat),
+                      tooltip: cat,
+                    };
+                  })}
                 />
               </fieldset>
             ))}

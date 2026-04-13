@@ -117,7 +117,7 @@ function getDataForPieChart(sum, expected, expectedData, unexpectedData, groups,
         labelKey: "name",
         unit: "Kč",
         color: ({ key }) => (key === "unexpected" ? "grey" : undefined),
-        label: [{ position: "outside", type: "label" }],
+        label: { position: "outside", type: "label" },
         // label: {
         //   children: (props) => {
         //     const { value, viewBox, data } = props;
@@ -196,7 +196,7 @@ const MonthSummary = createVisualComponent({
 
     //@@viewOn:render
     return (
-      <Uu5Elements.Block header={<Amount value={tx.difference} />} headerType="heading">
+      <Uu5Elements.Block key={account} header={<Amount value={tx.difference} />} headerType="heading">
         <Uu5Elements.Grid templateColumns="repeat(auto-fit, minmax(320px, 1fr))">
           <FinPart
             name="příjmy"

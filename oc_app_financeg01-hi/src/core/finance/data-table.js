@@ -28,7 +28,7 @@ const DataTable = createVisualComponent({
     if (item) {
       const { handlerMap, ...restItem } = item;
       itemData = restItem;
-      updateItem = handlerMap.update;
+      updateItem = handlerMap?.update;
     }
 
     //@@viewOn:render
@@ -74,7 +74,7 @@ const DataTable = createVisualComponent({
               header: "Detail",
               cell: ({ data }) => (
                 <>
-                  {data.details.split("\n").map((text, i) => (
+                  {data.details?.split("\n").map((text, i) => (
                     <Fragment key={i}>
                       {i > 0 && <br />}
                       {text}
