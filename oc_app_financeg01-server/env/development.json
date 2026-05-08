@@ -1,0 +1,9 @@
+{
+  "port": 8080,
+  "uuSubAppDataStoreMap": {
+    "primary": "mongodb://127.0.0.1:27017/ocAppPrimary"
+  },
+  "asid_license_owner_list": ["7-7948-1"],
+  "asid": "00000000000000000000000000000001",
+  "log_level": "INFO"
+}

@@ -1,0 +1,17 @@
+{
+  "product": "oc_app_financeg01",
+  "version": "0.1.0",
+  "license": "License Commercial",
+  "description": {
+    "en": "",
+    "cs": ""
+  },
+  "devkit": {
+    "development": {
+      "appBoxLocationUri": "----- VALUE REQUIRED -----",
+      "appDeploymentUri": null
+    }
+  },
+  "oc_app_financeg01-hi": {},
+  "oc_app_financeg01-server": {}
+}
