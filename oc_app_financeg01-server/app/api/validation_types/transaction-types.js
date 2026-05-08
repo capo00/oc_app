@@ -9,9 +9,9 @@ const importDtoInType = shape({
       account: string(),
       accountName: string(),
       details: string(),
-      cc: number(),
-      vc: number(),
-      sc: number(),
+      cc: string(),
+      vc: string(),
+      sc: string(),
       category: string()
     })
   )
@@ -33,8 +33,8 @@ const updateDtoInType = shape({
   account: string(),
   accountName: string(),
   details: string(),
-  cc: number(),
-  vc: number(),
-  sc: number(),
+  cc: string(),
+  vc: string(),
+  sc: string(),
   category: string()
 });

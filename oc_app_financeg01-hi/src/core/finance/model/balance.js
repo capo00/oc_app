@@ -69,11 +69,11 @@ const CSV_INDEXES = {
     accountCode: 5,
     accountNumber: 8,
     accountName: 9,
-    detailStart: 13,
-    detailEnd: 18,
-    cc: 19,
-    vc: 20,
-    sc: 21,
+    detailStart: 10,
+    detailEnd: 15,
+    cc: 16,
+    vc: 17,
+    sc: 18,
   },
   kb: {
     value: 4,
@@ -176,6 +176,11 @@ export default class Balance {
           code = code.split(/0000+/)[1];
         }
 
+        let details = Balance.range(row, i.detailStart, i.detailEnd).join("\n");
+        if (details.startsWith(row[i.accountName].trim())) {
+          details = details.substring(row[i.accountName].trim().length).trim();
+        }
+
         let tx = new Transaction({
           code,
           value: value,
@@ -185,7 +190,7 @@ export default class Balance {
             ? [row[i.accountNumber].trim(), row[i.accountCode].trim()].join("/")
             : null,
           accountName: row[i.accountName].trim() || null,
-          details: Balance.range(row, i.detailStart, i.detailEnd).join("\n"),
+          details: details || null,
           cc: row[i.cc]?.trim() || null,
           vc: row[i.vc]?.trim() || null,
           sc: row[i.sc]?.trim() || null,

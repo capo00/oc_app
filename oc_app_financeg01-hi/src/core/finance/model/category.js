@@ -104,6 +104,12 @@ export default class Category {
         return (/^27-8378231747\/0100$/.test(tx.account) || /^855838159\/0800$/.test(tx.account)) && tx.cc == 498;
       },
     },
+    "flat-caslav-insurance": {
+      name: "Pojištění bytu v Čáslavi",
+      isValid(tx) {
+        return "1071001005/5500" === tx.account;
+      },
+    },
     "flat-prague-hypothec": {
       name: "Hypotéka bytu v Praze",
       isValid(tx) {
@@ -144,6 +150,12 @@ export default class Category {
       name: "Pojištění bytu v Praze",
       isValid(tx) {
         return "246246/5500" === tx.account && tx.vc == 4688332046;
+      },
+    },
+    "flat-prague-tax": {
+      name: "Daň za byt v Praze",
+      isValid(tx) {
+        return "7755-77628031/0710" === tx.account && tx.vc == "9006300897";
       },
     },
     "flat-kh-hypothec": {
@@ -330,13 +342,19 @@ export default class Category {
     "osvc-health": {
       name: "OSVČ - zdravotní pojištění",
       isValid(tx) {
-        return (tx.account === "2010201091/0710" || tx.account === "1112001221/0710") && tx.vc == "9006300897";
+        return (tx.account === "2010201091/0710" || tx.account === "1112001221/0710" || tx.account === "1114007221/0710") && tx.vc == "9006300897";
       },
     },
     "osvc-social": {
       name: "OSVČ - sociální pojištění",
       isValid(tx) {
-        return tx.account === "1011-7925161/0710" && tx.vc === "0024573629";
+        return ["1011-7925161/0710"].includes(tx.account);
+      },
+    },
+    "osvc-tax": {
+      name: "OSVČ - daň z příjmu",
+      isValid(tx) {
+        return "721-77628111/0710" === tx.account && tx.vc == "9006300897";
       },
     },
     "revolut": {

@@ -26,8 +26,9 @@ function CategoryList({ category, dateFrom, dateTo, account }) {
       result = <Uu5Elements.Pending size="xl" />;
       break;
     case "ready":
+    case "itemPending":
       const sortedList = data.toSorted((itemA, itemB) => (itemA.data.date > itemB.data.date ? -1 : 1));
-      result = <DataTable data={sortedList} />;
+      result = <DataTable data={sortedList.map(({ data, handlerMap }) => ({ ...data, handlerMap }))} />;
       break;
     default:
       console.error("Unknown state, data", state, data);
